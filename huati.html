@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>话题</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.article{
+			padding: 20px;
+		}
+		.article-title{
+			margin-bottom: 15px;
+			font-size: 14px;
+		}
+		.article-join{
+			font-size: 12px;
+			color: #bfbfbf;
+			margin: 0;
+		}
+		.article-head{
+			float: left;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background-color: #f4f4f4;
+		}
+		.article-author{
+			margin: 25px 0 18px 50px;
+			font-size: 13px;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="media"></div>
+		<div class="article">
+			<h4 class="article-title"></h4>
+			<img src="" class="article-head">
+			<p class="article-author"></p>
+			<span class="article-date"></span>
+			<span class="article-join"></span>
+			<div class="article-cont"></div>
+		</div>
+		<div class="comments">
+			<p class="hint">精彩评论</p>
+			<div class="hr"></div>	
+			<ul class="comments-list">
+			</ul>
+		</div>
+		<div class="modal">
+			<div class="modal-main">
+				<div class="modal-body">
+					<span class="close"></span>
+					<h5>下载艺术狗，浏览更多精彩评论</h5>
+					<button class="btn-close"></button>
+				</div>				
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-comment">
+{% for (var i = 0; i < o.length; i++) { %}
+<li>
+	<img class="lazy" data-original="{%=o[i].userPic+'?imageMogr2/thumbnail/80x80'%}">
+	<div class="comment-body">
+		{%=o[i].userName%}
+		<p>{%=o[i].commentTxt%}</p>
+	</div>
+	<span class="comment-date">{%=moment(o[i].createAt).format('MM月DD日')%}</span>
+</li>
+{% } %}
+<p class="mui-text-center btn-more" style="letter-spacing:2px;color: #b5b5b5;font-size: 12px;margin-top:10px;">MORE</p>
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+mui.init();
+$(function(){
+	$.getJSON('huati.js', function(data) {
+    if (data.status==200) {
+    	var topic = data.data.topic,commentList = data.data.commentList,hotTopicList = data.data.hotTopicList;
+	    console.log(topic);
+	   //  if (topic.showTopicHead==1) {
+	   //  	switch(topic.topicHeadType){
+	   //  		//图文头部url类型 1为图片，2为音频，3为视频
+				// 	case 1:
+				// 		$('.media').css({
+				// 			'display': 'flex',
+				// 			'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+				// 			'background-size': 'cover'
+				// 		});
+				// 	  break;
+				// 	case 2:
+				// 		$('.media').css({
+				// 			'display': 'flex',
+				// 			'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+				// 			'background-size': 'cover'
+				// 		})
+				// 		.append('<img src="img/music.png" class="play-audio">')
+				// 		.after('<audio src="mp3/fade.mp3" id="audio" controls="controls"></audio>');
+				// 	  break;
+				//   case 3:
+				//   	$('.media').css({
+				// 			'display': 'flex',
+				// 			'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+				// 			'background-size': 'cover'
+				// 		})
+				// 		.append('<img src="img/play.png" class="play-video">')
+				// 		.after('<div id="video"><iframe frameborder="0" name="video" width="100%" height="200" src="http://v.qq.com/iframe/player.html?vid=n0188e90rqr&tiny=1&auto=0"></iframe></div>');
+				// 	  break;
+				// 	// default:
+				// 	//   return;
+				// }
+	   //  }
+	    $('.article-title').html(topic.topicName);
+	    $('.article-author').html(topic.author);
+	    $('.article-join').html(topic.joinNum+'人参与');
+	    $('.article-head').attr('src', topic.headPic+'?imageMogr2/thumbnail/80x80');
+	    $('.article-date').html(moment(topic.createAt).format('YYYY/MM/DD'))
+	    var html = topic.marketingDeschtml.replace(/<img src=/gi,"<img class='lazy' data-original=");
+			$('.article-cont').html(html)
+			$('.article-cont').find('style').remove();
+			var comment = tmpl('tmpl-comment',commentList)
+			$('.comments-list').append(comment)
+			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"});
+
+    }
+	});
+})
+</script>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>专题</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.article{
+			text-align: center;
+			padding: 15px 30px;
+		}
+		.article-title{
+			margin-bottom: 25px;
+		}
+		.article-head{
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			margin: 0 auto;
+			display: block;
+			background-color: #f4f4f4;
+		}
+		.article-author{
+			color: #000;
+			font-size: 14px;
+			margin-top: 10px;
+		}
+		.article-info{
+			/*width: 312px;*/
+			text-align: left;
+			height: 72px;
+			padding: 6px 12px;
+			border: 1px dotted #444;
+			border-radius: 5px;
+			font-size: 12px;
+			line-height: 20px;
+			margin: 15px auto 0;
+			overflow : hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+		}
+		/*.modal{
+			background-color: rgba(0,0,0,.4);
+		}*/
+		.modal-main{
+			width: 295px;
+			padding: 25px;
+			height: auto;
+			border-radius: 5px;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="article">
+			<h4 class="article-title"></h4>
+			<img src="" class="article-head">
+			<p class="article-author"></p>
+			<span class="article-date"></span>
+			<div class="article-info"></div>
+		</div>
+		<div class="subjects">
+			
+		</div>
+		<div class="modal">
+			<div class="modal-main">
+				<div class="modal-body">
+					<span class="close"></span>
+					<p></p>
+				</div>				
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-subject">
+{% for (var i = 0; i < o.length; i++) { %}
+<div class="subject lazy" data-original="{%=o[i].topicPic+'?imageMogr2/thumbnail/750x450'%}" style="background-size:cover">
+	<h3>{%=o[i].topicName%}</h3>
+	<p>{%=o[i].topicLabel?o[i].topicLabel+' | ':''%}{%=o[i].viewerNum%} <img src='img/view.png' width='16' /></p>
+</div>
+{% } %}
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+mui.init();
+$(function(){
+	$.getJSON('zhuanti.js', function(data) {
+		if (data.status=200) {
+			$('.article-title').html(data.data.galleryName);
+			$('.article-author').html(data.data.cityName);
+			$('.article-date').html(data.data.collectionNum?data.data.collectionNum+'人收藏':'');
+			$('.article-head').attr('src', data.data.galleryPic+'?imageMogr2/thumbnail/200x200');
+			var subject = tmpl('tmpl-subject',data.data.topics)
+			$('.subjects').append(subject)
+			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"});
+			// $('.article-info,.modal-body p').load(data.data.galleryDesc);
+			$('.article-info,.modal-body p').text('龙美术馆在上海浦东和徐汇滨江同时拥有两大规模的场馆—龙美术馆（浦东馆）和龙美术馆（西岸馆），构成独特的“一城两馆”的艺术生态，是目前国内最具规模和收藏实力的私立美术馆。');
+			;
+		}
+	});
+})
+</script>

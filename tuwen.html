@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>图文</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+	</head>
+	<body>
+		<div class="media"></div>
+		<!-- <div class="media">
+			<img src="img/play.png" class="play-video">
+		</div>
+		<div id="video">
+			<iframe frameborder="0" name="video" width="100%" height="200" src="http://v.qq.com/iframe/player.html?vid=n0188e90rqr&tiny=1&auto=0"></iframe>
+		</div>
+		<div class="media">
+			<img src="img/music.png" class="play-audio">
+		</div>
+		<audio src="mp3/fade.mp3" id="audio" controls="controls"></audio> -->
+		<div class="article">
+			<h4 class="article-title"></h4>
+			<p class="article-author"></p>
+			<p class="article-date"></p>
+			<div class="article-cont"></div>
+			<div class="article-tags">
+			</div>
+		</div>
+		<div class="comments">
+			<p class="hint">精彩评论</p>
+			<div class="hr"></div>	
+			<ul class="comments-list">
+			</ul>
+		</div>
+		<div class="recommends">
+			<p class="mui-text-center" style="letter-spacing:2px;color: #000;font-size: 15px;">推/荐/阅/读</p>
+			<ul class="recommends-list">
+			</ul>
+		</div>
+		<div class="modal">
+			<div class="modal-main">
+				<div class="modal-body">
+					<span class="close"></span>
+					<h5>下载艺术狗，浏览更多精彩评论</h5>
+					<button class="btn-close"></button>
+				</div>				
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-tag">
+{% for (var i = 0; i < o.length; i++) { %}
+<div class="tag">{%=o[i]%}</div>
+{% } %}
+</script>
+<script type="text/x-tmpl" id="tmpl-comment">
+{% for (var i = 0; i < o.length; i++) { %}
+<li>
+	<img class="lazy" data-original="{%=o[i].userPic+'?imageMogr2/thumbnail/80x80'%}">
+	<div class="comment-body">
+		{%=o[i].userName%}
+		<p>{%=o[i].commentTxt%}</p>
+	</div>
+	<span class="comment-date">{%=moment(o[i].createAt).format('MM月DD日')%}</span>
+</li>
+{% } %}
+<p class="mui-text-center btn-more" style="letter-spacing:2px;color: #b5b5b5;font-size: 12px;margin-top:10px;">MORE</p>
+</script>
+<script type="text/x-tmpl" id="tmpl-recommend">
+{% for (var i = 0; i < o.length; i++) { %}
+<li>
+	<img class="lazy" data-original="{%=o[i].topicPic+'?imageMogr2/thumbnail/314x188'%}">
+	<div class="recommend-body">
+		{%=o[i].topicName%}
+		<p>{%=o[i].author%}<br>{%=o[i].viewerNum%} 阅读</p>
+	</div>
+</li>
+{% } %}
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+mui.init();
+$(function(){
+	$.getJSON('tuwen.js', function(data) {
+    if (data.status==200) {
+    	var topic = data.data.topic,commentList = data.data.commentList,hotTopicList = data.data.hotTopicList;
+	    if (topic.showTopicHead==1) {
+	    	switch(topic.topicHeadType){
+	    		//图文头部url类型 1为图片，2为音频，3为视频
+					case 1:
+						$('.media').css({
+							'display': 'flex',
+							'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+							'background-size': 'cover'
+						});
+					  break;
+					case 2:
+						$('.media').css({
+							'display': 'flex',
+							'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+							'background-size': 'cover'
+						})
+						.append('<img src="img/music.png" class="play-audio">')
+						.after('<audio src="mp3/fade.mp3" id="audio" controls="controls"></audio>');
+					  break;
+				  case 3:
+				  	$('.media').css({
+							'display': 'flex',
+							'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+							'background-size': 'cover'
+						})
+						.append('<img src="img/play.png" class="play-video">')
+						.after('<div id="video"><iframe frameborder="0" name="video" width="100%" height="200" src="http://v.qq.com/iframe/player.html?vid=n0188e90rqr&tiny=1&auto=0"></iframe></div>');
+					  break;
+					// default:
+					//   return;
+				}
+	    }
+	    $('.article-title').html(topic.topicName);
+	    $('.article-author').html(topic.author);
+	    $('.article-date').html(moment(topic.createAt).format('YYYY/MM/DD'))
+	    var html = topic.marketingDeschtml.replace(/<img src=/gi,"<img class='lazy' data-original=");
+			$('.article-cont').html(html)
+			$('.article-cont').find('style').remove();
+			var tag = tmpl('tmpl-tag',topic.topicLabelDefine.split(','))
+			$('.article-tags').append(tag)
+			var comment = tmpl('tmpl-comment',commentList)
+			$('.comments-list').append(comment)
+			var recommend = tmpl('tmpl-recommend',hotTopicList)
+			$('.recommends-list').append(recommend)
+			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"});
+
+    }
+	});
+
+	
+	$('.media').on('click', '.play-audio', function(event) {
+		event.preventDefault();
+		$(this).fadeOut();
+		$('#audio').css('display', 'block');		
+		var audio = document.getElementById('audio'); 
+		if(audio!==null){             
+			if(audio.paused){                 
+	      audio.play(); 
+			}else{
+			 	audio.pause();
+			}
+		} 
+	}).on('click', '.play-video', function(event) {
+		event.preventDefault();
+		$(this).parent('.media').fadeOut('',function(){
+			$('#video').css('position', 'static');
+		});
+	});
+})
+</script>
