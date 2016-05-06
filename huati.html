@@ -27,10 +27,13 @@
 			height: 40px;
 			border-radius: 50%;
 			background-color: #f4f4f4;
+			margin-right: 10px;
 		}
 		.article-author{
-			margin: 25px 0 18px 50px;
 			font-size: 13px;
+	    line-height: 13px;
+	    margin-top: 22px;
+	    color: #000;
 		}
 		</style>
 	</head>
@@ -40,8 +43,7 @@
 			<h4 class="article-title"></h4>
 			<img src="" class="article-head">
 			<p class="article-author"></p>
-			<span class="article-date"></span>
-			<span class="article-join"></span>
+			<span class="article-date"></span><span class="article-join"></span>
 			<div class="article-cont"></div>
 		</div>
 		<div class="comments">
@@ -123,7 +125,7 @@ $(function(){
 	    $('.article-author').html(topic.author);
 	    $('.article-join').html(topic.joinNum+'人参与');
 	    $('.article-head').attr('src', topic.headPic+'?imageMogr2/thumbnail/80x80');
-	    $('.article-date').html(moment(topic.createAt).format('YYYY/MM/DD'))
+	    $('.article-date').html(moment(topic.createAt).format('YYYY-MM-DD')+'/')
 	    var html = topic.marketingDeschtml.replace(/<img src=/gi,"<img class='lazy' data-original=");
 			$('.article-cont').html(html)
 			$('.article-cont').find('style').remove();

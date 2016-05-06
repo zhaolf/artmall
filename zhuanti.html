@@ -59,7 +59,7 @@
 	<body>
 		<div class="article">
 			<h4 class="article-title"></h4>
-			<img src="" class="article-head">
+			<div class="article-head"></div>
 			<p class="article-author"></p>
 			<span class="article-date"></span>
 			<div class="article-info"></div>
@@ -79,8 +79,8 @@
 </html>
 <script type="text/x-tmpl" id="tmpl-subject">
 {% for (var i = 0; i < o.length; i++) { %}
-<div class="subject lazy" data-original="{%=o[i].topicPic+'?imageMogr2/thumbnail/750x450'%}" style="background-size:cover">
-	<h3>{%=o[i].topicName%}</h3>
+<div class="subject lazy" data-original="{%=o[i].topicPic+'?imageMogr2/thumbnail/750x450'%}" style="background-size:cover;background-position: center center;">
+	<h3>&nbsp;</h3>
 	<p>{%=o[i].topicLabel?o[i].topicLabel+' | ':''%}{%=o[i].viewerNum%} <img src='img/view.png' width='16' /></p>
 </div>
 {% } %}
@@ -99,14 +99,30 @@ $(function(){
 			$('.article-title').html(data.data.galleryName);
 			$('.article-author').html(data.data.cityName);
 			$('.article-date').html(data.data.collectionNum?data.data.collectionNum+'人收藏':'');
-			$('.article-head').attr('src', data.data.galleryPic+'?imageMogr2/thumbnail/200x200');
+			$('.article-head').css({
+				'background': 'url('+data.data.galleryPic+'?imageView2/2/w/200/h/200/q/80) center center',
+				'background-size':'cover',
+			});
 			var subject = tmpl('tmpl-subject',data.data.topics)
 			$('.subjects').append(subject)
 			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"});
 			// $('.article-info,.modal-body p').load(data.data.galleryDesc);
-			$('.article-info,.modal-body p').text('龙美术馆在上海浦东和徐汇滨江同时拥有两大规模的场馆—龙美术馆（浦东馆）和龙美术馆（西岸馆），构成独特的“一城两馆”的艺术生态，是目前国内最具规模和收藏实力的私立美术馆。');
-			;
+			if (data.data.galleryDescTxt&&data.data.galleryDescTxt!='') {
+				$('.article-info,.modal-body p').text(data.data.galleryDescTxt)
+			}else{
+				$('.article-info').remove()
+			}
 		}
+	});
+	$('.article').on('click', '.article-info', function(event) {
+		event.preventDefault();
+		$('.modal').css('display', 'flex');
+		$('html,body').css('overflow', 'hidden');
+	});
+	$('.modal').on('click', '.close', function(event) {
+		event.preventDefault();
+		$('.modal').hide()
+		$('html,body').css('overflow', 'auto');
 	});
 })
 </script>

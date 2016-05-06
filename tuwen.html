@@ -10,6 +10,17 @@
 		<script src="js/mui.min.js"></script>
 	</head>
 	<body>
+		<div class="preloading">
+			<div class="spinner">
+			  <div class="dot1"></div>
+			  <div class="dot2"></div>
+			</div>
+		</div>
+		<div class="download">
+      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer">
+        <img src="img/download.png" width="100%" id="down">
+      </a>
+    </div>
 		<div class="media"></div>
 		<!-- <div class="media">
 			<img src="img/play.png" class="play-video">
@@ -27,7 +38,7 @@
 			<p class="article-date"></p>
 			<div class="article-cont"></div>
 			<div class="article-tags">
-			</div>
+		</div>
 		</div>
 		<div class="comments">
 			<p class="hint">精彩评论</p>
@@ -74,7 +85,7 @@
 <li>
 	<img class="lazy" data-original="{%=o[i].topicPic+'?imageMogr2/thumbnail/314x188'%}">
 	<div class="recommend-body">
-		{%=o[i].topicName%}
+		<div class="toppic-name">{%=o[i].topicName%}</div>
 		<p>{%=o[i].author%}<br>{%=o[i].viewerNum%} 阅读</p>
 	</div>
 </li>
@@ -88,7 +99,12 @@
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" charset="UTF-8">
 mui.init();
+var image = [];
+var flag = getUrlParam('flag');
 $(function(){
+	// if (flag==1) {
+		$('.download').fadeIn();
+	// }
 	$.getJSON('tuwen.js', function(data) {
     if (data.status==200) {
     	var topic = data.data.topic,commentList = data.data.commentList,hotTopicList = data.data.hotTopicList;
@@ -97,14 +113,14 @@ $(function(){
 	    		//图文头部url类型 1为图片，2为音频，3为视频
 					case 1:
 						$('.media').css({
-							'display': 'flex',
+							'display': '-webkit-box',
 							'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
 							'background-size': 'cover'
 						});
 					  break;
 					case 2:
 						$('.media').css({
-							'display': 'flex',
+							'display': '-webkit-box',
 							'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
 							'background-size': 'cover'
 						})
@@ -112,12 +128,13 @@ $(function(){
 						.after('<audio src="mp3/fade.mp3" id="audio" controls="controls"></audio>');
 					  break;
 				  case 3:
-				  	$('.media').css({
-							'display': 'flex',
-							'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
-							'background-size': 'cover'
+				  	$('.media')
+				  	.css({
+							'display': '-webkit-box',
+							// 'background': 'url('+topic.curiosityPicUrl+'?imageMogr2/thumbnail/750x400)',
+							// 'background-size': 'cover'
 						})
-						.append('<img src="img/play.png" class="play-video">')
+						// .append('<img src="img/play.png" class="play-video">')
 						.after('<div id="video"><iframe frameborder="0" name="video" width="100%" height="200" src="http://v.qq.com/iframe/player.html?vid=n0188e90rqr&tiny=1&auto=0"></iframe></div>');
 					  break;
 					// default:
@@ -130,15 +147,39 @@ $(function(){
 	    var html = topic.marketingDeschtml.replace(/<img src=/gi,"<img class='lazy' data-original=");
 			$('.article-cont').html(html)
 			$('.article-cont').find('style').remove();
-			var tag = tmpl('tmpl-tag',topic.topicLabelDefine.split(','))
-			$('.article-tags').append(tag)
-			var comment = tmpl('tmpl-comment',commentList)
-			$('.comments-list').append(comment)
+			if (moment(topic.createAt).format('x')<moment().format('x')) {
+				$('.article-cont img.lazy').eq(0).remove()
+			}
+			if (topic.topicLabelDefine&&topic.topicLabelDefine!='') {
+				var tag = tmpl('tmpl-tag',topic.topicLabelDefine.split(','))
+				$('.article-tags').append(tag)
+			}
+			// var comment = tmpl('tmpl-comment',commentList)
+			// $('.comments-list').append(comment)
+			if (commentList.length>0) {
+				var comment = tmpl('tmpl-comment',commentList)
+				$('.comments-list').append(comment)
+			}else{
+				$('.comments').remove();
+			}
 			var recommend = tmpl('tmpl-recommend',hotTopicList)
 			$('.recommends-list').append(recommend)
 			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"});
-
+			$('.article-cont img.lazy').each(function(index, el) {
+				var img = $(this).data('original')
+				image.push(img)
+				$(this).click(function(event) {
+					var data = {'i':index,"image":img}
+					console.log(data)
+					bridge.send(data,function(responseData){})
+				});
+			});
     }
+	});
+
+	$('.comments').on('click', '.btn-more', function(event) {
+		event.preventDefault();
+		// 交互事件
 	});
 
 	

@@ -13,13 +13,26 @@ var getUrlParam = function(name) {
 };
 
 
-$('.comments,.article').on('click', '.btn-more,.article-info', function(event) {
-	event.preventDefault();
-	$('.modal').css('display', 'flex');
-	$('html,body').css('overflow', 'hidden');
-});
-$('.modal').on('click', '.close,.btn-close', function(event) {
-	event.preventDefault();
-	$('.modal').hide()
-	$('html,body').css('overflow', 'auto');
-});
+//$('.comments,.article').on('click', '.btn-more,.article-info', function(event) {
+//	event.preventDefault();
+//	$('.modal').css('display', 'flex');
+//	$('html,body').css('overflow', 'hidden');
+//});
+//$('.modal').on('click', '.close,.btn-close', function(event) {
+//	event.preventDefault();
+//	$('.modal').hide();
+//	$('html,body').css('overflow', 'auto');
+//});
+
+$.ajaxSetup({
+	  // timeout: 10000,
+	  dataType: 'json',
+	  cache: false,
+	  beforeSend: function(){
+	  },
+	  error: function (xhr, status, e) { 
+	  },
+	  complete: function (xhr, status) { 
+	    $('.preloading').fadeOut()
+	  }
+}); 

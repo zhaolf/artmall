@@ -10,7 +10,7 @@
     "exhibitNum": 0,
     "galleryDesc": "http://bm.artgoer.cn/list/e5fa3190-ee24-11e4-b226-c5429399ce3b.html",
     "galleryName": "龙美术馆",
-    "galleryPic": "http://7xavon.com1.z0.glb.clouddn.com/logo-1.jpg",
+    "galleryPic": "http://7xavon.com1.z0.glb.clouddn.com/FveqKokcof5J1lx3qF9PbLFqPF7A",
     "id": 1,
     "isRecommend": "1",
     "status": "0",

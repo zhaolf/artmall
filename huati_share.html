@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="format-detection" content="telephone=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.article{
+			padding: 20px 15px;
+		}
+		.article-title{
+			margin-bottom: 15px;
+			font-size: 14px;
+		}
+		.article-join{
+			font-size: 12px;
+			color: #bfbfbf;
+			margin: 0;
+		}
+		.article-head{
+			float: left;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background-color: #f4f4f4;
+			margin-right: 10px;
+		}
+		.article-author{
+			font-size: 13px;
+  		line-height: 13px;
+  		margin-top: 22px;
+  		color: #000;
+		}
+		.article-cont{
+			margin: 25px 0;
+			font-size: 14px;
+			color: #666;
+			line-height: 24px;
+		}
+		.article-gallery img{
+			width: 100%;
+			margin-bottom: 5px;
+		}
+		.comments{
+			padding-bottom: 50px;
+		}
+		.comment-body{
+			padding-top: 10px;
+			margin-left: 56px;
+			color: #949494
+		}
+		.comments .hint{
+			letter-spacing: 4px;
+			text-indent: 5px;
+			width: 110px;
+			margin-left: -55px;
+		}
+		.comments-list li p{
+			margin-bottom: 10px;
+			color: #666;
+		}
+		.comment-gallery{
+			height: 50px;
+		}
+		.comments-list li img{
+			margin-right: 13px;
+			width: 43px;
+			height: 43px;
+		}
+		.comment-gallery img.lazy{
+			width: 50px;
+			height: 50px;
+			border-radius: 0;
+			margin-right: 10px;
+		}
+		.comment-date{
+			top: 25px;
+			color: #cacaca;
+		}
+		.download{
+			display: block;
+		}
+		.btn-download{
+			display: block;
+			width: 160px;
+			font-size: 14px;
+			color: #949494;
+			margin: 20px auto; 
+		}
+		.comment-tools{
+			height: 20px;
+			margin-top: 15px;
+			line-height: 24px;
+		}
+		.comment-tools img{
+			width: 20px!important;
+			height: 20px!important;
+			border-radius: 0!important;
+			margin-right: 8px!important;
+		}
+		.comment-tools img.mui-pull-right{
+			float: right;
+			margin: 0!important;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="preloading">
+			<div class="spinner">
+			  <div class="dot1"></div>
+	  	  <div class="dot2"></div>
+			</div>
+		</div>
+		<div class="download">
+      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer">
+        <img src="http://sp.artgoer.cn/brief/images/download.png" width="100%" id="down">
+      </a>
+    </div>
+		<div class="media"></div>
+		<div class="article">
+			<h4 class="article-title"></h4>
+			<img src="" class="article-head">
+			<p class="article-author"></p>
+			<span class="article-date"></span><span class="article-join"></span>
+			<div class="article-cont"></div>
+			<div class="article-gallery"></div>
+		</div>
+		<div class="comments">
+			<p class="hint"> 精 彩 评 论</p>
+			<div class="hr"></div>	
+			<ul class="comments-list">
+			</ul>
+		</div>
+		<div class="modal">
+			<div class="modal-main">
+				<div class="modal-body">
+					<span class="close"></span>
+					<h5>下载艺术狗，浏览更多精彩评论</h5>
+					<button class="btn-close"></button>
+				</div>				
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-picture">
+{% for (var i = 0; i < o.length; i++) { %}
+<img class="lazy" width="100" data-original="{%=o[i].picPath+'?imageView2/2/w/750'%}" data-preview-src="{%=o[i].picPath%}" data-preview-group="{%=o[i].topicId%}" />
+{% } %}
+</script>
+<script type="text/x-tmpl" id="tmpl-comment">
+{% for (var i = 0; i < o.length; i++) { %}
+<li class="comment-list-a"  data-id='{"commentId":{%=o[i].id%},"topicId":{%=o[i].topicId%},"replyName":"{%=o[i].userName%}","replyId":{%=o[i].userId%}}'>
+	<img class="lazy" data-original="{%=o[i].userPic+'?imageMogr2/thumbnail/100x100'%}">
+	<div class="comment-body">
+		{%=o[i].userName%}
+		<p>{%=o[i].commentTxt%}</p>
+		{% if (o[i].pictures&&o[i].pictures.length>0) { %}
+		<div class="comment-gallery">
+		{% for (var j = 0; j < o[i].pictures.length; j++) { %}
+			<img class="lazy" width="100" data-original="{%=o[i].pictures[j].picPath+'?imageView2/2/w/100'%}" data-preview-src="{%=o[i].pictures[j].picPath%}" data-preview-group="{%=o[i].pictures[j].commentId%}" />
+		{% } %}	
+		</div>
+		{% } %}
+		<div class="comment-tools">
+			<img src="img/star@2x.png" width="20">{%=o[i].replyNum%}
+			<img class="mui-pull-right" src="img/comment@2x.png" width="20">
+		</div>
+	</div>
+	<span class="comment-date">{%=moment(o[i].createAt).format('MM月DD日')%}</span>
+</li>
+{% } %}
+<a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer" class="mui-text-center btn-download">下载艺术狗查看更多评论</a>
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/mui.previewimage.js"></script>
+<script type="text/javascript" src="js/mui.zoom.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+var token = getUrlParam('token'),topicId = getUrlParam('topicId'),scourceTable = getUrlParam('scourceTable'),clientType = getUrlParam('clientType'),flag = getUrlParam('flag');
+mui.init();
+mui.previewImage();
+
+$(function(){
+	$.getJSON('huati_share.js',{'token': token,'topicId':topicId,'scourceTable':scourceTable}, function(data) {
+    if (data.status==200) {
+    	var topic = data.data.topic,commentList = data.data.commentList,hotTopicList = data.data.hotTopicList,pictures = data.data.topic.pictures;	
+			var $body = $('body');
+      document.title = topic.topicName;
+      // hack在微信等webview中无法修改document.title的情况
+      var $iframe = $('<iframe src="/favicon.ico"></iframe>');
+      $iframe.on('load',function() {
+        setTimeout(function() {
+          $iframe.off('load').remove();
+        }, 0);
+      }).appendTo($body);
+			
+			$('.article-title').html(topic.topicName);
+	    $('.article-author').html(topic.author);
+	    $('.article-join').html(topic.joinNum+'人参与');
+	    $('.article-head').attr('src', topic.headPic+'?imageMogr2/thumbnail/100x100');
+	    $('.article-date').html(moment(topic.createAt).format('YYYY-MM-DD')+'/')
+			$('.article-cont').html(topic.topicDesc)
+			var gallery = tmpl('tmpl-picture',pictures)
+			$('.article-gallery').append(gallery)	
+			if(commentList &&commentList!='' &&commentList.length>0){
+				var comment = tmpl('tmpl-comment',commentList);
+				$('.comments-list').append(comment);
+				if(commentList.length < 4){//小于10条不显示more
+					// $('.btn-more,.article-info').hide();
+				}
+			}else{
+				$('.comments').remove();
+			}
+			
+			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"});
+
+    }
+	});
+})
+</script>
+<script type="text/javascript">
+ 
+</script>
