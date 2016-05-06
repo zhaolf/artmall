@@ -15,6 +15,7 @@
 		.article-title{
 			margin-bottom: 15px;
 			font-size: 14px;
+			font-weight: normal;
 		}
 		.article-join{
 			font-size: 12px;
@@ -23,8 +24,8 @@
 		}
 		.article-head{
 			float: left;
-			width: 40px;
-			height: 40px;
+			width: 32px;
+			height: 32px;
 			border-radius: 50%;
 			background-color: #f4f4f4;
 			margin-right: 10px;
@@ -32,7 +33,7 @@
 		.article-author{
 			font-size: 13px;
   		line-height: 13px;
-  		margin-top: 22px;
+  		margin-top: 16px;
   		color: #000;
 		}
 		.article-cont{
@@ -187,6 +188,9 @@
 var token = getUrlParam('token'),topicId = getUrlParam('topicId'),scourceTable = getUrlParam('scourceTable'),clientType = getUrlParam('clientType'),flag = getUrlParam('flag');
 mui.init();
 mui.previewImage();
+mui(document.body).on('tap', '.download,.btn-download', function() {
+	location.href='http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer';
+})
 
 $(function(){
 	$.getJSON('huati_share.js',{'token': token,'topicId':topicId,'scourceTable':scourceTable}, function(data) {
