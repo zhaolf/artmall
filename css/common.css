@@ -329,3 +329,11 @@ user-select:text;
 	display: none;
 }
 .download img{vertical-align: bottom}
+
+
+.fleft{
+	float: left;
+}
+.fright{
+	float: right;
+}

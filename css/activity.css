@@ -1,0 +1,323 @@
+.activity-cover{
+	height: 245px;
+	text-align: center;
+	background: #ccc;
+	color: #fff;
+	position: relative;
+}
+.activity-title{
+	margin-top: 0;
+	margin-bottom:8px;
+	padding-top: 106px;
+	font-size: 22px;
+}
+.activity-slogan{
+	/*border-bottom: 1px solid #fff*/
+}
+.activity-slogan hr{
+	border-color: #fff;
+	display: inline-block;
+	width: 34px;
+}
+.activity-slogan p{
+	position: relative;
+	top: -10px;
+	display: inline-block;
+	padding: 0 3px;
+}
+.activity-info{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height: 50px;
+  line-height: 50px;
+  padding: 0 15px;
+}
+.activity-content{
+	padding: 12px;
+}
+.activity-content h4{
+	font-weight: normal;
+	font-size: 12px;
+}
+.triangle-bottomright {
+  width: 0;
+  height: 0;
+  border-bottom: 15px solid #000;
+  border-left: 15px solid transparent;
+  position: relative;
+	top: -17px;
+	margin-right: 7px;
+}
+.activity-desc{
+	line-height: 24px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+.activity-attr{
+	background-color: #f5f5f5;
+	padding: 10px;
+	margin: 30px 0;
+}
+.activity-attr h4{
+	font-size: 13px;
+	margin: 0;
+	font-weight: bold;
+}
+.activity-attr p{
+	font-size: 13px;
+	margin-bottom: 0;
+	line-height: 20px;
+}
+.hr{
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+	height: 19px;
+	margin-bottom: 25px;
+}
+.hr p{
+	display: inline-block;
+	background-color: #fff;
+	padding: 0 10px;
+}
+.sep{
+	height: 10px;
+	background-color: #f6f6f6;
+	border: 1px solid #ececec
+}
+.gallery{
+	/*width: 320px;
+	margin: 0 auto;
+	padding-bottom: 0;*/
+}
+.gallery-work{
+	text-align: center;
+	display: inline-block;
+	margin-bottom: 15px;
+}
+.tab-content>.tab-pane {
+  display: none;
+  padding: 20px 10px;
+}
+.nav-tabs{
+	border-bottom: 1px solid #d4d4d4;
+	margin: 0;
+	padding: 0;
+}
+.nav-tabs>li {
+  float: left;
+  margin-bottom: -1px;
+  list-style: none;
+  width: 50%;
+  text-align: center;
+}
+.nav-tabs>li a,.nav-tabs>li a:visited{
+	width: 50px;
+	margin: auto 0;
+	display: inline-block;
+  padding: 13px 0;
+  font-size: 15px;
+  color: #949494;
+  text-decoration: none;
+}
+.nav-tabs>li.active a{
+	border-bottom: 1px solid #000;
+	color: #000;
+}
+
+.btn-group-vertical>.btn-group:after, .btn-group-vertical>.btn-group:before, .btn-toolbar:after, .btn-toolbar:before, .clearfix:after, .clearfix:before, .container-fluid:after, .container-fluid:before, .container:after, .container:before, .dl-horizontal dd:after, .dl-horizontal dd:before, .form-horizontal .form-group:after, .form-horizontal .form-group:before, .modal-footer:after, .modal-footer:before, .nav:after, .nav:before, .navbar-collapse:after, .navbar-collapse:before, .navbar-header:after, .navbar-header:before, .navbar:after, .navbar:before, .pager:after, .pager:before, .panel-body:after, .panel-body:before, .row:after, .row:before {
+  display: table;
+  content: " ";
+}
+.nav:after {
+  clear: both;
+}
+.tab-content>.active {
+  display: block;
+}
+.work-cover{
+	background-color: rgba(0,0,0,.8);
+	position: relative;
+	margin-bottom: 15px;
+}
+.work-cover p {
+	text-align: right;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding-right: 5px;
+	margin: 0;
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+	background: url(../img/b.png);
+  background-size: auto 100%;
+}
+
+.work-info p:first-child{
+	height: 15px;
+	font-size: 15px;
+	line-height: 15px;
+	color: #000;
+}
+    
+.work-info p{
+	margin: 10px 0;
+  color: #b4b4b4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /*display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;*/
+	height: 14px;
+	font-size: 14px;
+	line-height: 14px;
+}
+.work-info span{
+	color: #949494;
+	font-size: 12px;
+}
+
+.btn-vote{
+	/*border-radius: 3px;
+	border: none;
+	color: #fff;
+	background-color: #262a35;
+	height: 22px;
+	line-height: 22px;
+	width: 60px;
+	text-align: center;*/
+	width: 20px;
+	height: 20px;
+	border: none;
+	background: url('../img/star@2x.png') no-repeat;
+	background-size: auto 100%;
+	// margin-right: 8px;
+  vertical-align: middle;
+}
+.btn-more{
+	width: 300px;
+	background: #F8F8F8;
+	color: #B8B8B8;
+	margin: 0 auto 30px;
+	height: 42px;
+	line-height: 42px;
+	text-align: center;
+	cursor: pointer;
+	border: none;
+	display: block;
+}
+.bar-upload,.btn-publish{
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height: 45px;
+	line-height: 45px;
+	background: #101115;
+	color: #fff;
+	text-align: center;
+}
+#upfile{
+}
+.up_input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	opacity: 0;
+	z-index: 2
+}
+
+
+.activity-publish{
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #fff;
+	z-index: 99;
+	padding: 15px;
+	display: none
+}
+.activity-publish div{
+	display: inline-block;
+	vertical-align: top;
+}
+.activity-publish .activity-title{
+	padding-top: 0;
+	font-size: 20px;
+}
+.activity-publish .activity-slogan{
+  max-width: 44%;
+}
+.activity-publish .activity-slogan p{
+	color: #787878;
+	margin-top: 5px;
+}
+.your-cover{
+	height: 137px;
+	width: 137px;
+	background-color: #ccc;
+	margin-right: 21px;
+	margin-bottom: 10px;
+}
+.input-group{
+	width: 100%;
+	position: relative;
+	display: block!important;
+}
+.input-group-addon{
+	position: absolute;
+	left: 7px;
+	top: 15px;
+}
+.input-group input{
+	width: 100%;
+	border: none;
+	border-radius: 0;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #dfdfdf;
+	text-indent: 30px;
+	margin-bottom: 8px;
+	font-size: 14px;
+	color: #000
+}
+.icon{
+	width: 15px;
+	height: 15px;
+}
+.icon-user{
+	background: url(../img/user@2x.png) no-repeat;
+	background-size: 100% 100%;
+}
+.icon-phone{
+	background: url(../img/phone@2x.png) no-repeat;
+	background-size: 100% 100%;
+}
+.icon-remark{
+	background: url(../img/remark@2x.png) no-repeat;
+	background-size: 100% 100%;
+}
+.pTip{
+  display: none;
+  text-align: center;
+  z-index: 99999;
+  position: fixed;
+  left: 50%;
+  top: 45%;
+  margin-left: -80px;
+  width: 160px;
+  padding: 10px;
+  background: #000; 
+  opacity: 0.8;
+  color: #FFF;
+  border-radius: 4px;
+}
