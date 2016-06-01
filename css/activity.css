@@ -179,6 +179,8 @@
 .work-info span{
 	color: #949494;
 	font-size: 12px;
+  position: relative;
+  top: 2px;
 }
 
 .btn-vote{
@@ -196,7 +198,7 @@
 	background: url('../img/star@2x.png') no-repeat;
 	background-size: auto 100%;
 	// margin-right: 8px;
-  vertical-align: middle;
+  vertical-align: bottom;
 }
 .btn-more{
 	width: 300px;
