@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>艺术家</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.artist-top{
+			text-align: center;
+			color: #fff;
+			height: 258px;
+			width: 100%;
+			background: #ccc;
+			padding-top: 56px;
+		}
+		.artist-top *{
+			position: relative;
+			z-index: 9
+		}
+		.artist-top-cover{
+			position: absolute;
+	    top: -56px;
+	    width: 100%;
+	    height: 314px;
+	    -webkit-filter: blur(40px);
+			z-index: 2px;
+		}
+		.artist-top-head{
+			width: 70px;
+			height: 70px;
+			margin: 0 auto 15px;
+			border-radius: 50%;
+		}
+		.artist-top-author{
+			color: #fff;
+			font-size: 14px;
+			line-height: 14px;
+		}
+		.artist-top-info{
+			display: inline-block;
+			font-size: 13px;
+			line-height: 16px;
+			width: 50%;
+		}
+		.artist-top-info.mui-text-right{
+		}
+		.btn-modify{
+			border: 1px solid #fff;
+			border-radius: 3px;
+			font-size: 12px;
+			background-color: transparent;
+			color: #fff;
+			display: block;
+			margin: 23px auto 0;
+			padding: 4px 13px;
+		}
+		#slider{
+			background: #fff;
+			z-index: 10;
+			position: relative;
+		}
+		.mui-slider-progress-bar{
+      background-color: transparent!important;
+		}
+	  .mui-slider-progress-bar .bar-bg{
+      width: 31px;
+      background-color: #000;
+      height: 2px;
+      margin: 0 auto;
+	  }
+	  .mui-slider-indicator.mui-segmented-control{
+	  	border-bottom: 1px solid #d4d4d4;
+	  }
+	  .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+	  	border-bottom: 0;
+	  	color: #000;
+	  }
+	  .mui-segmented-control.mui-segmented-control-inverted .mui-control-item{
+	  	color: #949494;
+	  	font-size: 15px;
+	  	line-height: 48px;
+	  	position: relative;
+	  }
+	  .nav-bg{
+	  	position: absolute;
+	  	bottom: 0;
+	  	width: 60px;
+	  	height: 1px;
+	  	background-color: #000;
+	  	left: 50%;
+	  	margin-left: -30px;
+	  	display: none;
+	  }
+	  .mui-control-item.mui-active .nav-bg{
+	  	display: inline-block;
+	  }
+	  .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+	  	color: #000;
+	  }
+	  .mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item{
+	  	border-top-color: #d4d4d4;
+	  	border-bottom: none;
+	  }
+
+	  .bar-creat{
+	  	padding: 15px;
+	  	font-size: 15px;
+	  	color: #949494;
+	  	line-height: 24px;
+	  }
+	  .btn-creat{
+	  	border: none;
+	  	width: 24px;
+	  	height: 24px;
+	  	background: url('img/creat.png') no-repeat center;
+			background-size: 100% 100%;
+	  }
+	  .mui-table-view-cell{
+	  	padding: 16px 0 0;
+	  }
+	  .mui-table-view .mui-table-view-cell:first-child{
+	  	padding-top: 0;
+	  }
+	  .mui-table-view-cell:after{
+	  	right: 15px;
+	  }
+	  .work-cover{
+	  	height: 355px;
+	  	width: 100%;
+	  	position: relative;
+	  }
+	  .work-audio{
+	  	width: 32px;
+	  	height: 32px;
+	  	position: absolute;
+	  	right: 15px;
+	  	top: 12px;
+	  	background: url('img/audio.png') no-repeat;
+	  	background-size: 100% auto;
+	  }
+	  .work-body{
+	  	padding: 0 15px;
+	  	height: 45px;
+	  	line-height: 45px;
+	  	font-size: 15px;
+	  	color: #000;
+	  	position: relative;
+	  }
+	  .work-body .mui-pull-right{
+	  	margin-right: 50px;
+	  }
+	  .work-body .btn-del{
+	  	border: none;
+	  	width: 18px;
+	  	height: 22px;
+	  	background: url('img/del.png') no-repeat center;
+			background-size: auto 100%;
+			position: absolute;
+			right: 15px;
+			top: 10px;
+	  }
+
+	  #intro .mui-content-padded{
+	  	position: relative;
+	  	padding-bottom: 8px;
+	  }
+	  #intro .mui-content-padded::after{
+	    position: absolute;
+		  right: 5px;
+		  bottom: 0;
+		  left: 5px;
+		  height: 1px;
+		  content: '';
+		  -webkit-transform: scaleY(.5);
+		  transform: scaleY(.5);
+		  background-color: #ececec;
+	  }
+	  #intro h4{
+	  	font-weight: normal;
+	  	font-size: 15px;
+	  	color: #000;
+	  	margin: 20px 5px 15px;
+	  }
+	  #intro p{
+	  	font-size: 14px;
+	  	color: #666;
+	  	margin-left: 5px;
+	  }
+	  .artist-tag{
+	  	height: 34px;
+	  	background: #f6f6f6;
+	  	color: #949494;
+	  	font-size: 14px;
+	  	line-height: 34px;
+	  	text-align: center;
+	  	margin: 0 5px 7px;
+	  }
+		.artist-state{
+			padding: 10px 15px;
+			position: relative;
+		}
+		.artist-state::after{
+	    position: absolute;
+		  right: 15px;
+		  bottom: 0;
+		  left: 15px;
+		  height: 1px;
+		  content: '';
+		  -webkit-transform: scaleY(.5);
+		  transform: scaleY(.5);
+		  background-color: #ececec;
+	  }
+		.state-desc{
+			font-size: 14px;
+			color: #666;
+		}
+		.state-gallery{
+			margin-bottom: 12px;
+		}
+		.gallery-cover {
+			display: inline-block;
+			height: 100%;
+			margin-bottom: 2px;
+		}
+	  .state-tag{
+	  	padding: 5px 8px;
+	  	border: 1px solid #dfdfdf;
+	  	font-size: 12px;
+	  	line-height: 12px;
+	  	color: #949494;
+	  	display: inline-block;
+	  }
+	  .state-info .btn-del{
+	  	border: none;
+	  	width: 18px;
+	  	height: 22px;
+	  	background: url('img/del.png') no-repeat center;
+			background-size: auto 100%;
+			/*position: absolute;
+			right: 15px;
+			top: 10px;*/
+	  }
+
+	  .artist-exhibit{
+	  	background-color: #f6f6f6;
+	  	margin-bottom: 4px;
+	  }
+	  .artist-exhibit div{
+	  	display: inline-block;
+	  	width: 49%;
+	  	vertical-align: top;
+	  }
+	  .exhibit-info{
+	  	padding-left: 10px;
+	  	position: relative;
+	  }
+	  .exhibit-info h4{
+	  	font-size: 14px;
+	  	line-height: 14px;
+	  	color: #000;
+	  	margin-top: 28px;
+	  	height: 28px;
+	  	margin-bottom: 20%;
+	  	overflow : hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+	  }
+	  .exhibit-info p{
+	  	color: #949494;
+	  	font-size: 13px;
+	  	line-height: 13px;
+	  	/*margin-bottom: 13px;*/
+	  }
+
+	  .mui-loading{
+	  	margin-top: 20%;
+	  }
+		</style>
+	</head>
+	<body>
+		<div class="preloading">
+			<div class="spinner">
+			  <div class="dot1"></div>
+			  <div class="dot2"></div>
+			</div>
+		</div>
+		<div class="download">
+      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer">
+        <img src="img/download.png" width="100%" id="down">
+      </a>
+    </div>
+    <div class="artist">
+    	<div class="artist-top"></div>
+    </div>
+    <div class="mui-content">
+			<div id="slider" class="">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item mui-active" href="#work">
+						作品
+						<div class="nav-bg"></div>
+					</a>
+					<a class="mui-control-item" href="#intro">
+						简介
+						<div class="nav-bg"></div>
+					</a>
+					<a class="mui-control-item" href="#state">
+						状态
+						<div class="nav-bg"></div>
+					</a>
+					<a class="mui-control-item" href="#exhibit">
+						展览
+						<div class="nav-bg"></div>
+					</a>
+				</div>
+				<!-- <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-3"><div class="bar-bg"></div></div> -->
+				<div class="mui-slider-group">
+					<div id="work" class="mui-slider-item mui-control-content mui-active">
+						<div class="mui-loading">
+							<div class="mui-spinner">
+							</div>
+						</div>
+					</div>
+					<div id="intro" class="mui-slider-item mui-control-content">
+						<div class="mui-loading">
+							<div class="mui-spinner">
+							</div>
+						</div>
+					</div>
+					<div id="state" class="mui-slider-item mui-control-content">
+						<div class="mui-loading">
+							<div class="mui-spinner">
+							</div>
+						</div>
+					</div>
+					<div id="exhibit" class="mui-slider-item mui-control-content">
+						<div class="mui-loading">
+							<div class="mui-spinner">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-artistTop">
+<div class="artist-top-cover" style="background:url({%=o.headPic+'?imageMogr2/thumbnail/750x750'%}) center no-repeat;background-size:cover"></div>
+<div class="artist-top-head lazy" data-original="{%=o.headPic+'?imageMogr2/thumbnail/140x140'%}" style="background-size:cover;background-position: center;"></div>
+<p class="artist-top-author">{%=o.userName%}</p>
+<div class="artist-top-info mui-text-right">作品{%=o.worksNum%} |</div>
+<div class="artist-top-info mui-text-left" style="width:48%">粉丝{%=o.fansNum%}</div>
+<button class="btn-modify">简介编辑</button>
+</script>
+<script type="text/x-tmpl" id="tmpl-work">
+<div class="bar-creat">
+	发布作品<button class="mui-pull-right btn-creat"></button>
+</div>
+<ul class="mui-table-view">
+	{% for (var i = 0; i < o.length; i++) { %}
+	<li class="mui-table-view-cell">
+		<div class="work-cover lazy" data-original="{%=o[i].worksPic+'?imageMogr2/thumbnail/750x750'%}" style="background-size:cover;background-position: center;">
+			{% if(o[i].workAudio&&o[i].workAudio!=''){ %}
+				<div class="work-audio"></div>
+			{% } %}
+		</div>
+		<div class="work-body">
+			{%=o[i].workName%}
+			<p class="mui-pull-right"><img src="img/star.png"  style="width:14px"> {%=o[i].goodTimes%} <img src="img/viewnum.png" style="width:16px;margin-left:10px;"> {%=o[i].viewerNum%}</p>
+			<button class="btn-del"></button>
+		</div>
+	</li>
+	{% } %}
+</ul>
+</script>
+<script type="text/x-tmpl" id="tmpl-intro">
+<div class="mui-content-padded">
+	<h4>创作类别</h4>
+	<div class="mui-row">
+		{% for (var i = 0; i < o.worksLabelList.length; i++) { %}
+			<div class="mui-col-xs-4"><div class="artist-tag">{%=o.worksLabelList[i].labelName%}</div></div>
+		{% } %}
+	</div>
+</div>
+<div class="mui-content-padded">
+	<h4><img src="img/local.png" style="width:13px;vertical-align: top"> {%=o.cityName%}</h4>
+</div>
+<div class="mui-content-padded">
+	<h4>个人描述</h4>
+	<p>{%=o.selfDesc%}</p>
+</div>
+<div class="mui-content-padded">
+	<h4>参展经历</h4>
+	<p>{%=o.remarks%}</p>
+</div>
+</script>
+<script type="text/x-tmpl" id="tmpl-state">
+{% for (var i = 0; i < o.length; i++) { %}
+	<div class="artist-state">
+		<p class="state-desc">{%=o[i].topicDesc%}</p>
+		<div class="state-gallery">
+			{% for (var j = 0; j < o[i].pictures.length; j++) { %}
+			<div class="gallery-cover lazy" data-original="{%=o[i].pictures[j].picPath+'?imageMogr2/thumbnail/750x750'%}" style="background-size:cover;background-position: center;"></div>
+			{% } %}
+		</div>
+		<div class="state-info">
+			<div style="margin-bottom:10px;height:24px;">
+				{% for (var j = 0; j < o[i].topicLabelList.length; j++) { %}
+					<div class="state-tag">{%=o[i].topicLabelList[j].labelName%}</div>
+				{% } %}
+				<button class="mui-pull-right btn-del"></button>
+			</div>
+			<div class="mui-clearfix"></div>
+			<p>
+				<img src="img/star@2x.png" style="width:18px;vertical-align: top;"> {%=o[i].praiseNum%} <img src="img/comment.png" style="width:18px;vertical-align: top;margin-left:30px;"> {%=o[i].joinNum%}
+				<span class="mui-pull-right">{%=moment(o[i].createAt).format('YYYY.MM.DD')%}</span>
+			</p>
+		</div>
+	</div>
+{% } %}
+</script>
+<script type="text/x-tmpl" id="tmpl-exhibit">
+{% for (var i = 0; i < o.length; i++) { %}
+	<div class="artist-exhibit">
+		<div class="exhibit-cover lazy" data-original="{%=o[i].exhibitPic+'?imageMogr2/thumbnail/375x375'%}" style="background-size:cover;background-position: center;"></div>
+		<div class="exhibit-info">
+			<h4>{%=o[i].name%}</h4>
+			<p>{%=o[i].galleryName%} | {%=o[i].exhibitCity%}</p>
+			<p>{%=moment(o[i].exhibitStartDate).format('YYYY.MM.DD')%}-{%=moment(o[i].exhibitEndDate).format('MM.DD')%}</p>
+			<p style="margin-top:10%;margin-bottom:0"><img src="img/viewnum.png" style="width:15px;"> {%=o[i].viewerNum%} <img src="img/comment_new@2x.png" style="width:14px;margin-left:15px;"> {%=o[i].viewerNum%}</p>
+		</div>
+	</div>
+{% } %}
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+var flag = getUrlParam('flag');
+$(function(){
+	if (flag==1) {
+		$('.download').fadeIn();
+	}
+	$.getJSON('artist.js', function(data) {
+    if (data.status=='200') {
+			var artistTop = tmpl('tmpl-artistTop',data.data)
+			$('.artist-top').append(artistTop)
+			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+
+			//获取作品
+			$.getJSON('artist_work.js', function(data) {
+			  if (data.status=='200') {
+			  	console.log(data.data)
+					var workHtml = tmpl('tmpl-work',data.data)
+			    $('#work').html(workHtml);
+					$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+			  }
+			});
+    }
+	});
+
+	var intro = document.getElementById('intro');
+	var state = document.getElementById('state');
+	var exhibit = document.getElementById('exhibit');
+	$('#sliderSegmentedControl').on('tap', '.mui-control-item', function(e) {
+		// $('#slider').height($('.mui-control-content.mui-active').height()+50);
+		if ($(this).index() === 1) {
+			if (intro.querySelector('.mui-loading')) {
+				//获取简介
+				$.getJSON('artist_intro.js', function(data) {
+				  if (data.status=='200') {
+						var introHtml = tmpl('tmpl-intro',data.data)
+				    $('#intro').html(introHtml);
+						// $('#slider').height($('.mui-control-content.mui-active').height()+50);
+				  }
+				});
+			}
+		} else if ($(this).index() === 2) {
+			if (state.querySelector('.mui-loading')) {
+				//获取状态
+				$.getJSON('artist_state.js', function(data) {
+				  if (data.status=='200') {
+						var stateHtml = tmpl('tmpl-state',data.data.hotTopicList)
+				    $('#state').html(stateHtml);
+				    var stateWidth = $('.state-gallery').width();
+				    $('.state-gallery').height(stateWidth)
+				    $('.state-gallery').each(function(index, el) {
+				    	var $this = $(this);
+				    	if ($this.find('.gallery-cover').length==0) {
+				    		$this.remove();
+				    	}
+				    	if ($this.find('.gallery-cover').length==1) {
+				    		$this.find('.gallery-cover').width("100%")
+				    	}
+				    	if ($this.find('.gallery-cover').length==2) {
+				    		$this.height(stateWidth/2);
+				    		$this.find('.gallery-cover').width("49%")
+				    	}
+				    	if ($this.find('.gallery-cover').length==3) {
+				    		$this.height(stateWidth/3.1);
+				    		$this.find('.gallery-cover').width("32%")
+				    	}
+				    	if ($this.find('.gallery-cover').length==4) {
+				    		$this.find('.gallery-cover').width("49%").height(stateWidth/2)
+				    	}
+				    	if ($this.find('.gallery-cover').length==5||$this.find('.gallery-cover').length==6) {
+				    		$this.height(stateWidth/3.1*2);
+				    		$this.find('.gallery-cover').width("32%").height(stateWidth/3.1)
+				    	}
+				    	if ($this.find('.gallery-cover').length==7||$this.find('.gallery-cover').length==8||$this.find('.gallery-cover').length==9) {
+				    		$this.find('.gallery-cover').width("32%").height(stateWidth/3.1)
+				    	}
+				    });
+						$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+						// $('#slider').height($('.mui-control-content.mui-active').height()+50);
+				  }
+				});
+			}
+		} else if ($(this).index() === 3) {
+			if (exhibit.querySelector('.mui-loading')) {
+				//获取展览
+				$.getJSON('artist_exhibit.js', function(data) {
+				  if (data.status=='200') {
+						var exhibitHtml = tmpl('tmpl-exhibit',data.data)
+				    $('#exhibit').html(exhibitHtml);
+				    $('.exhibit-cover').height($('.exhibit-cover').width())
+						$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+						// $('#slider').height($('.mui-control-content.mui-active').height()+50);
+				  }
+				});
+			}
+		}
+	});
+})
+</script>
