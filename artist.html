@@ -369,7 +369,7 @@
 <ul class="mui-table-view">
 	{% for (var i = 0; i < o.length; i++) { %}
 	<li class="mui-table-view-cell">
-		<div class="work-cover lazy" data-original="{%=o[i].worksPic+'?imageMogr2/thumbnail/750x750'%}" style="background-size:cover;background-position: center;">
+		<div class="work-cover lazy" data-userid="{%=o[i].authorId%}" data-workid="{%=o[i].id%}" data-original="{%=o[i].worksPic+'?imageMogr2/thumbnail/750x750'%}" style="background-size:cover;background-position: center;">
 			{% if(o[i].workAudio&&o[i].workAudio!=''){ %}
 				<div class="work-audio"></div>
 			{% } %}
@@ -431,7 +431,7 @@
 </script>
 <script type="text/x-tmpl" id="tmpl-exhibit">
 {% for (var i = 0; i < o.length; i++) { %}
-	<div class="artist-exhibit">
+	<div class="artist-exhibit" data-exhibitid="{%=o[i].id%}">
 		<div class="exhibit-cover lazy" data-original="{%=o[i].exhibitPic+'?imageMogr2/thumbnail/375x375'%}" style="background-size:cover;background-position: center;"></div>
 		<div class="exhibit-info">
 			<h4>{%=o[i].name%}</h4>
@@ -455,13 +455,15 @@ var flag = getUrlParam('flag');
 mui('#work').on('tap', '.work-cover', function(event) {
 	event.preventDefault();
 	/* Act on the event */
-	alert('作品点击事件')
+	var userId = $(this).data('userid'),workId = $(this).data('workid');
+	alert('作品点击事件 '+"userId:"+userId+" workId:"+workId)
 });
 // 展览点击事件
 mui('#exhibit').on('tap', '.artist-exhibit', function(event) {
 	event.preventDefault();
 	/* Act on the event */
-	alert('展览点击事件')
+	var exhibitId = $(this).data('exhibitid');
+	alert('展览点击事件 '+'exhibitId:'+exhibitId)
 });
 $(function(){
 	if (flag==1) {
