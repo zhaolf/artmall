@@ -150,7 +150,7 @@
 	  	position: relative;
 	  }
 	  .work-body .mui-pull-right{
-	  	margin-right: 50px;
+	  	/*margin-right: 50px;*/
 	  }
 	  .work-body .btn-del{
 	  	border: none;
@@ -247,6 +247,7 @@
 	  .artist-exhibit{
 	  	background-color: #f6f6f6;
 	  	margin-bottom: 4px;
+	  	position: relative;
 	  }
 	  .artist-exhibit div{
 	  	display: inline-block;
@@ -255,26 +256,32 @@
 	  }
 	  .exhibit-info{
 	  	padding-left: 10px;
-	  	position: relative;
+	  	/*position: relative;*/
 	  }
 	  .exhibit-info h4{
 	  	font-size: 14px;
 	  	line-height: 14px;
 	  	color: #000;
 	  	margin-top: 28px;
-	  	height: 28px;
-	  	margin-bottom: 20%;
+	  	max-height: 28px;
+	  	margin-bottom: 0;
 	  	overflow : hidden;
 			text-overflow: ellipsis;
 			display: -webkit-box;
 			-webkit-line-clamp: 2;
 			-webkit-box-orient: vertical;
 	  }
+	  .exhibit-info span{
+	  	display: inline-block;
+	  	/*margin-bottom: 20px;*/
+	  }
 	  .exhibit-info p{
 	  	color: #949494;
 	  	font-size: 13px;
 	  	line-height: 13px;
-	  	/*margin-bottom: 13px;*/
+	  	position: absolute;
+	    /*bottom: -10px;*/
+	  	margin-bottom: 0;
 	  }
 
 	  .mui-loading{
@@ -353,12 +360,12 @@
 <p class="artist-top-author">{%=o.userName%}</p>
 <div class="artist-top-info mui-text-right">作品{%=o.worksNum%} |</div>
 <div class="artist-top-info mui-text-left" style="width:48%">粉丝{%=o.fansNum%}</div>
-<button class="btn-modify">简介编辑</button>
+<!-- <button class="btn-modify">简介编辑</button> -->
 </script>
 <script type="text/x-tmpl" id="tmpl-work">
-<div class="bar-creat">
+<!-- <div class="bar-creat">
 	发布作品<button class="mui-pull-right btn-creat"></button>
-</div>
+</div> -->
 <ul class="mui-table-view">
 	{% for (var i = 0; i < o.length; i++) { %}
 	<li class="mui-table-view-cell">
@@ -370,7 +377,7 @@
 		<div class="work-body">
 			{%=o[i].workName%}
 			<p class="mui-pull-right"><img src="img/star.png"  style="width:14px"> {%=o[i].goodTimes%} <img src="img/viewnum.png" style="width:16px;margin-left:10px;"> {%=o[i].viewerNum%}</p>
-			<button class="btn-del"></button>
+			<!-- <button class="btn-del"></button> -->
 		</div>
 	</li>
 	{% } %}
@@ -411,7 +418,7 @@
 				{% for (var j = 0; j < o[i].topicLabelList.length; j++) { %}
 					<div class="state-tag">{%=o[i].topicLabelList[j].labelName%}</div>
 				{% } %}
-				<button class="mui-pull-right btn-del"></button>
+				<!-- <button class="mui-pull-right btn-del"></button> -->
 			</div>
 			<div class="mui-clearfix"></div>
 			<p>
@@ -428,9 +435,10 @@
 		<div class="exhibit-cover lazy" data-original="{%=o[i].exhibitPic+'?imageMogr2/thumbnail/375x375'%}" style="background-size:cover;background-position: center;"></div>
 		<div class="exhibit-info">
 			<h4>{%=o[i].name%}</h4>
-			<p>{%=o[i].galleryName%} | {%=o[i].exhibitCity%}</p>
-			<p>{%=moment(o[i].exhibitStartDate).format('YYYY.MM.DD')%}-{%=moment(o[i].exhibitEndDate).format('MM.DD')%}</p>
-			<p style="margin-top:10%;margin-bottom:0"><img src="img/viewnum.png" style="width:15px;"> {%=o[i].viewerNum%} <img src="img/comment_new@2x.png" style="width:14px;margin-left:15px;"> {%=o[i].viewerNum%}</p>
+			<span>-</span>
+			<p style="bottom:68px;">{%=o[i].galleryName%} | {%=o[i].exhibitCity%}</p>
+			<p style="bottom:48px;">{%=moment(o[i].exhibitStartDate).format('YYYY.MM.DD')%}-{%=moment(o[i].exhibitEndDate).format('MM.DD')%}</p>
+			<p style="bottom:18px;"><img src="img/viewnum.png" style="width:15px;"> {%=o[i].viewerNum%} <img src="img/comment_new@2x.png" style="width:14px;margin-left:15px;"> {%=o[i].viewerNum%}</p>
 		</div>
 	</div>
 {% } %}
@@ -443,6 +451,18 @@
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" charset="UTF-8">
 var flag = getUrlParam('flag');
+// 作品点击事件
+mui('#work').on('tap', '.work-cover', function(event) {
+	event.preventDefault();
+	/* Act on the event */
+	alert('作品点击事件')
+});
+// 展览点击事件
+mui('#exhibit').on('tap', '.artist-exhibit', function(event) {
+	event.preventDefault();
+	/* Act on the event */
+	alert('展览点击事件')
+});
 $(function(){
 	if (flag==1) {
 		$('.download').fadeIn();
@@ -456,7 +476,6 @@ $(function(){
 			//获取作品
 			$.getJSON('artist_work.js', function(data) {
 			  if (data.status=='200') {
-			  	console.log(data.data)
 					var workHtml = tmpl('tmpl-work',data.data)
 			    $('#work').html(workHtml);
 					$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
