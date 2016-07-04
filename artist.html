@@ -105,6 +105,9 @@
 	  	border-bottom: none;
 	  }
 
+	  #work .mui-table-view{
+	    top: -1px;
+	  }
 	  .bar-creat{
 	  	padding: 15px;
 	  	font-size: 15px;
@@ -119,7 +122,7 @@
 			background-size: 100% 100%;
 	  }
 	  .mui-table-view-cell{
-	  	padding: 16px 0 0;
+	  	padding: 18px 0 0;
 	  }
 	  .mui-table-view .mui-table-view-cell:first-child{
 	  	padding-top: 0;
@@ -196,7 +199,7 @@
 	  	font-size: 14px;
 	  	line-height: 34px;
 	  	text-align: center;
-	  	margin: 0 5px 7px;
+	  	margin: 0 7px 10px;
 	  }
 		.artist-state{
 			padding: 10px 15px;
@@ -216,6 +219,7 @@
 		.state-desc{
 			font-size: 14px;
 			color: #666;
+			margin-bottom: 13px;
 		}
 		.state-gallery{
 			margin-bottom: 12px;
@@ -232,6 +236,7 @@
 	  	line-height: 12px;
 	  	color: #949494;
 	  	display: inline-block;
+	  	margin-bottom: 5px;
 	  }
 	  .state-info .btn-del{
 	  	border: none;
@@ -414,7 +419,7 @@
 			{% } %}
 		</div>
 		<div class="state-info">
-			<div style="margin-bottom:10px;height:24px;">
+			<div style="margin-bottom:15px;min-height:24px;">
 				{% for (var j = 0; j < o[i].topicLabelList.length; j++) { %}
 					<div class="state-tag">{%=o[i].topicLabelList[j].labelName%}</div>
 				{% } %}
