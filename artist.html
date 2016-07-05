@@ -292,6 +292,25 @@
 	  .mui-loading{
 	  	margin-top: 20%;
 	  }
+	  .p-null{
+	  	font-size: 16px;
+	  	color: #c0c0c0;
+	    margin-top: 25px;
+	    text-align: center;
+	  }
+	  .btn-more{
+	  	width: 300px;
+	    background: #F8F8F8;
+	    color: #B8B8B8;
+	    margin: 10px auto;
+	    height: 42px;
+	    line-height: 42px;
+	    text-align: center;
+	    cursor: pointer;
+	    border: none;
+	    display: block;
+	    padding: 0;
+	  }
 		</style>
 	</head>
 	<body>
@@ -455,41 +474,48 @@
 <script type="text/javascript" src="js/zh-cn.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" charset="UTF-8">
-var flag = getUrlParam('flag');
+var flag = getUrlParam('flag'),pageIndexWork=pageIndexState=pageIndexExhibit=1;
 // 作品点击事件
 mui('#work').on('tap', '.work-cover', function(event) {
 	event.preventDefault();
 	/* Act on the event */
 	var userId = $(this).data('userid'),workId = $(this).data('workid');
 	alert('作品点击事件 '+"userId:"+userId+" workId:"+workId)
+}).on('tap', '.btn-more-work', function(event) {
+	event.preventDefault();
+	pageIndexWork++;
+	getWork(pageIndexWork)
 });
+// 状态分页
+mui('#state').on('tap', '.btn-more-state', function(event) {
+	event.preventDefault();
+	pageIndexState++;
+	getState(pageIndexState)
+})
 // 展览点击事件
 mui('#exhibit').on('tap', '.artist-exhibit', function(event) {
 	event.preventDefault();
 	/* Act on the event */
 	var exhibitId = $(this).data('exhibitid');
 	alert('展览点击事件 '+'exhibitId:'+exhibitId)
+}).on('tap', '.btn-more-exhibit', function(event) {
+	event.preventDefault();
+	pageIndexExhibit++;
+	getExhibit(pageIndexExhibit)
 });
 $(function(){
 	if (flag==1) {
 		$('.download').fadeIn();
+		$('#slider').css('padding-bottom', '50px');
 	}
 	$.getJSON('artist.js', function(data) {
     if (data.status=='200') {
 			var artistTop = tmpl('tmpl-artistTop',data.data)
 			$('.artist-top').append(artistTop)
 			$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
-
-			//获取作品
-			$.getJSON('artist_work.js', function(data) {
-			  if (data.status=='200') {
-					var workHtml = tmpl('tmpl-work',data.data)
-			    $('#work').html(workHtml);
-					$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
-			  }
-			});
-    }
-	});
+			getWork(pageIndexWork)
+		}
+	})
 
 	var intro = document.getElementById('intro');
 	var state = document.getElementById('state');
@@ -508,60 +534,103 @@ $(function(){
 				});
 			}
 		} else if ($(this).index() === 2) {
-			if (state.querySelector('.mui-loading')) {
-				//获取状态
-				$.getJSON('artist_state.js', function(data) {
-				  if (data.status=='200') {
-						var stateHtml = tmpl('tmpl-state',data.data.hotTopicList)
-				    $('#state').html(stateHtml);
-				    var stateWidth = $('.state-gallery').width();
-				    $('.state-gallery').height(stateWidth)
-				    $('.state-gallery').each(function(index, el) {
-				    	var $this = $(this);
-				    	if ($this.find('.gallery-cover').length==0) {
-				    		$this.remove();
-				    	}
-				    	if ($this.find('.gallery-cover').length==1) {
-				    		$this.find('.gallery-cover').width("100%")
-				    	}
-				    	if ($this.find('.gallery-cover').length==2) {
-				    		$this.height(stateWidth/2);
-				    		$this.find('.gallery-cover').width("49%")
-				    	}
-				    	if ($this.find('.gallery-cover').length==3) {
-				    		$this.height(stateWidth/3.1);
-				    		$this.find('.gallery-cover').width("32%")
-				    	}
-				    	if ($this.find('.gallery-cover').length==4) {
-				    		$this.find('.gallery-cover').width("49%").height(stateWidth/2)
-				    	}
-				    	if ($this.find('.gallery-cover').length==5||$this.find('.gallery-cover').length==6) {
-				    		$this.height(stateWidth/3.1*2);
-				    		$this.find('.gallery-cover').width("32%").height(stateWidth/3.1)
-				    	}
-				    	if ($this.find('.gallery-cover').length==7||$this.find('.gallery-cover').length==8||$this.find('.gallery-cover').length==9) {
-				    		$this.find('.gallery-cover').width("32%").height(stateWidth/3.1)
-				    	}
-				    });
-						$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
-						// $('#slider').height($('.mui-control-content.mui-active').height()+50);
-				  }
-				});
-			}
+			getState(pageIndexState)
 		} else if ($(this).index() === 3) {
-			if (exhibit.querySelector('.mui-loading')) {
-				//获取展览
-				$.getJSON('artist_exhibit.js', function(data) {
-				  if (data.status=='200') {
-						var exhibitHtml = tmpl('tmpl-exhibit',data.data)
-				    $('#exhibit').html(exhibitHtml);
-				    $('.exhibit-cover').height($('.exhibit-cover').width())
-						$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
-						// $('#slider').height($('.mui-control-content.mui-active').height()+50);
-				  }
-				});
-			}
+			getExhibit(pageIndexExhibit)
 		}
 	});
 })
+
+var getWork = function(pageIndex){
+	//获取作品
+	$.getJSON('artist_work.js',{'pageIndex':pageIndex},function(data) {
+	  if (data.status=='200') {
+	  	if (data.data.length>0) {
+	  		$('#work .mui-loading,.btn-more-work').remove();
+	  		var workHtml = tmpl('tmpl-work',data.data)
+		    $('#work').append(workHtml);
+		    if (data.data.length==10&&$('.btn-more-work').length==0) {
+		    	$('#work').append('<button class="btn-more btn-more-work">查看更多</button>')
+		    }
+				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+	  	} else  {
+	  		if ($('.work-cover').length==0) {
+		  		$('#work').html("<p class='p-null'>没有更多数据<p>");
+	  		}
+	  	}
+	  }
+	});
+}
+var getState = function(pageIndex){
+	//获取状态
+	$.getJSON('artist_state.js',{"pageIndex":pageIndex},function(data) {
+	  if (data.status=='200') {
+	  	if (data.data.hotTopicList.length>0) {
+	  		$('#state .mui-loading,.btn-more-state').remove();
+	  		var stateHtml = tmpl('tmpl-state',data.data.hotTopicList)
+		    $('#state').append(stateHtml);
+		    if (data.data.hotTopicList.length==10&&$('.btn-more-state').length==0) {
+		    	$('#state').append('<button class="btn-more btn-more-state">查看更多</button>')
+		    }
+		    var stateWidth = $('.state-gallery').width();
+		    $('.state-gallery').height(stateWidth)
+		    $('.state-gallery').each(function(index, el) {
+		    	var $this = $(this);
+		    	if ($this.find('.gallery-cover').length==0) {
+		    		$this.remove();
+		    	}
+		    	if ($this.find('.gallery-cover').length==1) {
+		    		$this.find('.gallery-cover').width("100%")
+		    	}
+		    	if ($this.find('.gallery-cover').length==2) {
+		    		$this.height(stateWidth/2);
+		    		$this.find('.gallery-cover').width("49%")
+		    	}
+		    	if ($this.find('.gallery-cover').length==3) {
+		    		$this.height(stateWidth/3.1);
+		    		$this.find('.gallery-cover').width("32%")
+		    	}
+		    	if ($this.find('.gallery-cover').length==4) {
+		    		$this.find('.gallery-cover').width("49%").height(stateWidth/2)
+		    	}
+		    	if ($this.find('.gallery-cover').length==5||$this.find('.gallery-cover').length==6) {
+		    		$this.height(stateWidth/3.1*2);
+		    		$this.find('.gallery-cover').width("32%").height(stateWidth/3.1)
+		    	}
+		    	if ($this.find('.gallery-cover').length==7||$this.find('.gallery-cover').length==8||$this.find('.gallery-cover').length==9) {
+		    		$this.find('.gallery-cover').width("32%").height(stateWidth/3.1)
+		    	}
+		    });
+				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+			} else  {
+				if ($('.artist-state').length==0) {
+		  		$('#state').append("<p class='p-null'>没有更多数据<p>");
+	  		}
+	  	}
+	  }
+			// $('#slider').height($('.mui-control-content.mui-active').height()+50);
+	});
+}
+var getExhibit = function(pageIndex){
+	//获取展览
+	$.getJSON('artist_exhibit.js',{'pageIndex':pageIndex},function(data) {
+	  if (data.status=='200') {
+	  	if (data.data.length>0) {
+	  		$('#exhibit .mui-loading,.btn-more-exhibit').remove();
+				var exhibitHtml = tmpl('tmpl-exhibit',data.data)
+		    $('#exhibit').append(exhibitHtml);
+		    if (data.data.length==1&&$('.btn-more-exhibit').length==0) {
+		    	$('#exhibit').append('<button class="btn-more btn-more-exhibit">查看更多</button>')
+		    }
+		    $('.exhibit-cover').height($('.exhibit-cover').width())
+				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+	  	} else {
+	  		if ($('.artist-state').length==0) {
+		  		$('#artist-exhibit').append("<p class='p-null'>没有更多数据<p>");
+	  		}
+	  	}		
+			// $('#slider').height($('.mui-control-content.mui-active').height()+50);
+	  }
+	});
+}
 </script>
