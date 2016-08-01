@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<link href="css/biqiang.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.work-cover{
+			height: 320px;
+		}
+		.work{
+			padding: 0 15px;
+			text-align: center;
+		}
+		.work h4{
+			font-size: 15px;
+			line-height: 1em;
+			margin: 30px 0 12px; 
+			font-weight: normal;
+		}
+		.work p{
+			font-size: 14px;
+			line-height: 1em;
+			color: #939393;
+			margin: 8px 0;
+		}
+		.btn-bar {
+			text-align: center;
+			margin-bottom: 25px;
+	  }
+		.btn-bar a {
+	    color: #333;
+	    position: relative;
+	    width: 119px;
+	    height: 39px;
+	    border: 1px solid #333;
+	    color: #333;
+	    line-height: 26px;
+	  }
+	  .btn-bar a:first-child {
+	  	margin-right: 50px;
+	  }
+	  .btn-vote{
+	  	width: 50px;
+	  	background: url('img/ic_vote.png') top center no-repeat;
+	  	background-size: 100% auto;
+	  	border: none;
+	  	margin: 10px auto 30px;
+	  	display: block;
+	  	padding-top: 55px;
+	  }
+		</style>
+	</head>
+	<body>
+		<!-- <div class="preloading">
+			<div class="spinner">
+			  <div class="dot1"></div>
+			  <div class="dot2"></div>
+			</div>
+		</div>
+		<div class="download">
+      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer">
+        <img src="img/download.png" width="100%" id="down">
+      </a>
+    </div> -->
+    <header class="mui-bar mui-bar-nav">
+			<!-- <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a> -->
+			<h1 class="mui-title"><span class="author"></span></h1>
+			<!-- <a class="mui-icon mui-pull-right">分享</a> -->
+		</header>
+		<div class="mui-content">
+			<div class="work">
+			</div>
+			<button class="btn-vote">投票</button>
+			<div class="btn-bar">
+				<a class="mui-btn btn-rank">查看排行榜</a>
+				<a class="mui-btn btn-join" >我也要参加</a>
+      </div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-work">
+<div class="work-cover" style="background-image:url('{%=o.worksPicUrl%}?imageMogr2/thumbnail/690x690');background-size:cover;background-position: center;background-repeat: no-repeat;"></div>
+<h4>{%=o.worksName%}</h4>
+<!-- <p>作者：夏日艺术家</p> -->
+<p>人气：<span class="vote-num">{%=o.voteNumber%}</span></p>
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<!-- <script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script> -->
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+mui('.mui-content').on('tap', '.btn-vote', function(event) {
+	event.preventDefault();
+	$.ajax({
+		url: biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/vote',
+		type: 'POST',
+		data: {
+			'workId': getUrlParam('workId'),
+			'token': getUrlParam('token')
+		},
+		beforeSend: function(){
+      $('.btn-vote').attr('disabled', 'disabled');
+    }
+	})
+	.done(function(data) {
+	  if (data.status=='200') {
+	  	if (data.data) {
+	  		pTip('投票成功');
+	  		$('.vote-num').text(parseInt($('.vote-num').text())+1);
+	  	}else{
+	  		pTip('已投过票');
+	  	}
+	  }
+	})
+	.always(function() {
+		$('.btn-vote').removeAttr('disabled');
+	});
+}).on('tap', '.btn-rank', function(event) {
+	event.preventDefault();
+	location.href="rank.html";
+});
+$(function(){
+	// $.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/getWeChatUserInfo', {'code': getUrlParam('code')}, function(data, textStatus) {
+	//   if (data.status=='200') {
+	  	$.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/workDetail', {'workId': getUrlParam('workId'),'token':getUrlParam('token')}, function(data, textStatus) {
+			  if (data.status=='200') {
+			  	$('.author').text(data.data.author+'的艺术空间');
+			  	var temp = tmpl('tmpl-work', data.data);
+		      $('.work').append(temp);
+					$('.work-cover').height($('.work-cover').width());
+				}
+			});
+	// 	}
+	// });
+	$('.btn-join').click(function(event) {
+    location.href = 'biqiang.html?token='+getUrlParam('token');
+	});
+});
+</script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+window.onload = function(){
+  $.get(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/jsConfig',{'url':location.href.split('#')[0],'token':getUrlParam('token')}, function(data) {
+		if (data.status=='200') {
+			wx.config({
+	      // debug: true,
+	      appId: data.data.appId,
+	      timestamp: data.data.timestamp,
+	      nonceStr: data.data.nonceStr,
+	      signature: data.data.signature,
+	      jsApiList: [
+	        'onMenuShareTimeline',
+	        'onMenuShareAppMessage',
+	        // 'onMenuShareQQ',
+	        // 'onMenuShareWeibo',
+	        ]
+	    });
+	    wx.ready(function () {
+	      var shareData = {
+	        title: '标题',
+	        desc: '内容',
+	        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx52a4c42173da390e&redirect_uri='+escape(data.data.url)+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect',
+	        imgUrl: 'http://7xavon.com1.z0.glb.clouddn.com/FiWDWTN4qMq8i5Ma2SBuVK1j_Cd2?imageMogr2/thumbnail/300'
+	      };
+	      var shareData1 = {
+	        title: '标题',
+	        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx52a4c42173da390e&redirect_uri='+escape(data.data.url)+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect',
+	        imgUrl: 'http://7xavon.com1.z0.glb.clouddn.com/FiWDWTN4qMq8i5Ma2SBuVK1j_Cd2?imageMogr2/thumbnail/300'
+	      };
+	      wx.onMenuShareAppMessage(shareData);
+	      wx.onMenuShareTimeline(shareData1);
+	      // wx.onMenuShareQQ(shareData);
+	      // wx.onMenuShareWeibo(shareData);
+	    });
+	    wx.error(function (res) {
+	      // alert(res.errMsg);
+	    });
+		}
+  });
+};
+</script>

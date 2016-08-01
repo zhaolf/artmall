@@ -1,0 +1,109 @@
+a{color: #949494}
+.mui-content{
+	background: #fff;
+}
+.mui-popover .mui-bar-nav{
+	border-radius: 0;
+}
+.mui-bar-nav.mui-bar .mui-pull-right{
+	color: #333;
+	font-size: 14px;
+}
+.mui-bar-nav .mui-icon-left-nav{
+	color: #333;
+}
+.mui-popover .mui-scroll-wrapper{
+	margin: 0;
+	height: 45px;
+	line-height: 45px;
+	border-bottom: 1px solid #d4d4d4;
+	border-radius: 0;
+}
+.mui-segmented-control.mui-scroll-wrapper .mui-control-item{
+	width: 57px;
+	padding: 0;
+	margin: 0 16px;
+	font-size: 14px;
+	color: #999;
+	border-bottom: 1px solid #fff;
+  height: 44px;
+	line-height: 44px;
+}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+  color: #333;
+  border-bottom: 1px solid #333;
+}
+.mui-bar{
+	box-shadow: none;
+	background-color: #fff;
+	border-bottom: 1px solid #ececec;
+}
+.mui-popup-button{
+	font-weight: normal!important;
+	// color: #333;
+}
+.ajax-loading{
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.6);
+	z-index: 999;
+	display: none;
+}
+.spinkit {
+	position: absolute;
+	left: 50%;
+	margin-left: -25px;
+	top: 45%;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinkit > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinkit .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinkit .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinkit .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinkit .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}

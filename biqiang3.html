@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<link href="css/biqiang.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.work-cover{
+			height: 320px;
+		}
+		.work{
+			padding: 0 15px 140px;
+			text-align: center;
+		}
+		.work h4{
+			font-size: 15px;
+			line-height: 1em;
+			margin: 30px 0 12px; 
+			font-weight: normal;
+		}
+		.work p{
+			font-size: 14px;
+			line-height: 1em;
+			color: #939393;
+			margin: 8px 0;
+		}
+		.bar-bottom{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			border-top: 1px solid #ececec;
+			padding: 30px 0;
+			background: #fff;
+		}
+		.bar-bottom .button{
+			border: none;
+			padding: 0;
+
+		}
+		.bar-bottom .button p,#share .button p{
+			color: #000;
+			margin-bottom: 5px;
+		}
+		.circle{
+			width: 50px;
+			height: 50px;
+			/*border: 1px solid #000;*/
+			/*border-radius: 50%;*/
+			display: inline-block;	
+		}
+		#share{
+			background-color: #fff;
+			text-align: center;
+		}
+		#share h4{
+			font-size: 15px;
+			line-height: 1em;
+			font-weight: normal;
+			padding: 17px 0 20px;
+			margin: 0;
+			position: relative;
+			border-bottom: 1px solid #ececec;
+		}
+		#share .button{
+			display: inline-block;
+			margin: 30px 25px 37px;
+		}
+		#share .button p{
+			color: #666;
+		}
+
+		</style>
+	</head>
+	<body>
+		<!-- <div class="preloading">
+			<div class="spinner">
+			  <div class="dot1"></div>
+			  <div class="dot2"></div>
+			</div>
+		</div>
+		<div class="download">
+      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer">
+        <img src="img/download.png" width="100%" id="down">
+      </a>
+    </div> -->
+    <header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">艺术空间已被点亮</h1>
+			<!-- <a class="mui-icon mui-pull-right">分享</a> -->
+		</header>
+		<div class="mui-content">
+			<div class="work">
+				
+			</div>
+			<div class="mui-row bar-bottom">
+				<div class="mui-col-xs-4 mui-text-center">
+					<a class="button btn-rank"><i class="circle"><img src="img/ic_rank.png" width="100%"></i><p>排行榜</p></a>
+				</div>
+				<div class="mui-col-xs-4 mui-text-center">
+					<a class="button" href="#share"><i class="circle"><img src="img/ic_invite.png" width="100%"></i><p>邀请好友投票</p></a>
+				</div>
+				<div class="mui-col-xs-4 mui-text-center">
+					<a class="button my-work"><i class="circle"><img src="img/ic_work.png" width="100%"></i><p>我的作品</p></a>
+				</div>
+			</div>
+		</div>
+    <div id="share" class="mui-popover mui-popover-action mui-popover-bottom">
+    	<h4 class="mui-text-center">分享至</h4>
+    	<div class="share-bottom">
+				<a class="button btn-share-wechat"><i class="circle"><img src="img/ic_wechat.png" width="100%"></i><p>微信</p></a>
+				<a class="button btn-share-timeline"><i class="circle"><img src="img/ic_pengyou.png" width="100%"></i><p>朋友圈</p></a>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-work">
+<div class="work-cover" style="background-image:url('{%=o.worksPicUrl%}?imageMogr2/thumbnail/690x690');background-size:cover;background-position: center;background-repeat: no-repeat;"></div>
+<h4>{%=o.worksName%}</h4>
+<p>作者：{%=o.worksName%}</p>
+<p>编号 {%=o.id%}</p>
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<!-- <script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script> -->
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+var userId = null;
+mui('.share-bottom').on('tap', '.btn-share-wechat,.btn-share-timeline', function(event) {
+	event.preventDefault();
+	// 微信中点击分享
+	if (navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1){
+		mui.alert('请点击右上角进行分享~',' ');
+    return;
+  }
+	// 分享
+	alert('要分享的链接：'+'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx52a4c42173da390e&redirect_uri='+escape(location.href.replace('biqiang3','share')+'&token=df68e038-143e-41cb-b554-456f78f184fc')+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect');
+});
+
+mui('.bar-bottom').on('tap', '.my-work', function(event) {
+	event.preventDefault();
+	location.href = 'work.html?mobile='+mobile;
+}).on('tap', '.btn-rank', function(event) {
+	event.preventDefault();
+	location.href="rank.html";
+});
+
+$(function(){
+	$.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/workDetail', {'workId': getUrlParam('workId'),'token':sessionStorage.getItem('token')}, function(data, textStatus) {
+	  if (data.status=='200') {
+	  	mobile = data.data.mobile;
+	  	var temp = tmpl('tmpl-work', data.data);
+      $('.work').append(temp);
+			$('.work-cover').height($('.work-cover').width());
+		}
+	});
+});
+</script>

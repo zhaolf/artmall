@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<link href="css/biqiang.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.mui-bar-nav .btn-share{
+			width: 45px;
+			height: 45px;
+		  background: url('img/ic_share.png') center no-repeat;
+			background-size: 18px;
+		}
+		.btn-bar {
+			text-align: center;
+	  }
+	  .btn-bar a {
+	    color: #333;
+	    position: relative;
+	    width: 119px;
+	    height: 39px;
+	    border: 1px solid #333;
+	    color: #333;
+	    line-height: 26px;
+	  }
+	  .btn-bar a:first-child {
+	  	margin-right: 50px;
+	  }
+		</style>
+	</head>
+	<body>
+		<!-- <div class="preloading">
+			<div class="spinner">
+			  <div class="dot1"></div>
+			  <div class="dot2"></div>
+			</div>
+		</div>
+		<div class="download">
+      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yicang.artgoer">
+        <img src="img/download.png" width="100%" id="down">
+      </a>
+    </div> -->
+    <header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">PK吧，版画！</h1>
+			<a class="mui-icon mui-pull-right btn-share"></a>
+		</header>
+		<div class="mui-content">
+			<a href="biqiang2.html"><img src="img/pk.png" style="width:300px;margin:63px auto;display:block"></a>
+			<div class="btn-bar">
+				<a class="mui-btn" href="rule.html">活动规则</a>
+				<a class="mui-btn" href="rank.html">查看排名</a>
+      </div>
+			<img src="img/ic_logo.png" style="width:140px;margin:63px auto 20px;display:block">
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script> -->
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+mui('.mui-bar-nav').on('tap', '.btn-share', function(event) {
+	event.preventDefault();
+	// 微信中点击分享
+	if (navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1){
+		mui.alert('请点击右上角进行分享~',' ');
+    return;
+  }
+	// 分享
+	alert('要分享的链接：'+'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx52a4c42173da390e&redirect_uri='+escape(location.href)+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect');
+});
+$(function(){
+	sessionStorage.setItem('token',getUrlParam('token'));
+});
+</script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+window.onload = function(){
+  $.get(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/jsConfig',{'url':location.href.split('#')[0],'token':getUrlParam('token')}, function(data) {
+		if (data.status=='200') {
+			wx.config({
+	      // debug: true,
+	      appId: data.data.appId,
+	      timestamp: data.data.timestamp,
+	      nonceStr: data.data.nonceStr,
+	      signature: data.data.signature,
+	      jsApiList: [
+	        'onMenuShareTimeline',
+	        'onMenuShareAppMessage',
+	        // 'onMenuShareQQ',
+	        // 'onMenuShareWeibo',
+	        ]
+	    });
+	    wx.ready(function () {
+	      var shareData = {
+	        title: '标题',
+	        desc: '内容',
+	        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx52a4c42173da390e&redirect_uri='+escape(data.data.url)+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect',
+	        imgUrl: 'http://7xavon.com1.z0.glb.clouddn.com/FiWDWTN4qMq8i5Ma2SBuVK1j_Cd2?imageMogr2/thumbnail/300'
+	      };
+	      var shareData1 = {
+	        title: '标题',
+	        link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx52a4c42173da390e&redirect_uri='+escape(data.data.url)+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect',
+	        imgUrl: 'http://7xavon.com1.z0.glb.clouddn.com/FiWDWTN4qMq8i5Ma2SBuVK1j_Cd2?imageMogr2/thumbnail/300'
+	      };
+	      wx.onMenuShareAppMessage(shareData);
+	      wx.onMenuShareTimeline(shareData1);
+	      // wx.onMenuShareQQ(shareData);
+	      // wx.onMenuShareWeibo(shareData);
+	    });
+	    wx.error(function (res) {
+	      // alert(res.errMsg);
+	    });
+		}
+  });
+};
+</script>

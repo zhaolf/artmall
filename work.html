@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<link href="css/biqiang.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		.work {
+		  text-align: center;
+		  margin: 0 5px;
+		}
+
+		.work h4 {
+		  text-align: left;
+		  font-size: 15px;
+		  line-height: 1em;
+		  color: #000;
+		  margin: 12px 0 8px;
+		  font-weight: normal;
+		}
+
+		.work p {
+		  text-align: left;
+		  font-size: 13px;
+		  line-height: 1em;
+		  color: #939393;
+		}
+
+		.work-cover {
+		  /*border: 1px solid #dfdfdf;*/
+		  /*padding: 20px 15px;*/
+		  /*display: inline-block;*/
+		}
+
+		.work-pic {
+		  height: 100%;
+		}
+	  .p-null{
+	  	font-size: 16px;
+	  	color: #c0c0c0;
+	    margin-top: 10px;
+	    text-align: center;
+	  }
+	  .btn-more{
+	  	width: 300px;
+	    background: #F8F8F8;
+	    color: #B8B8B8;
+	    margin: 10px auto;
+	    height: 42px;
+	    line-height: 42px;
+	    text-align: center;
+	    cursor: pointer;
+	    border: none;
+	    display: block;
+	    padding: 0;
+	  }
+		</style>
+	</head>
+	<body>
+    <header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">我的作品</h1>
+		</header>
+		<div class="mui-content">
+			<div class="works mui-row mui-content-padded">
+				
+			</div>			
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-work">
+{% for (var i = 0; i < o.length; i++) { %}
+<div class="mui-col-xs-6">
+  <div class="work" data-src="{%=o[i].picUrl%}">
+    <div class="work-cover">
+      <div class="work-pic lazy" data-original="{%=o[i].worksPicUrl+'?imageMogr2/thumbnail/375x375'%}" style="background-size:cover;background-position: center;background-repeat: no-repeat;"></div>
+    </div>
+    <h4 class="mui-ellipsis">编号：{%=o[i].id%}</h4>
+    <p class="mui-ellipsis">票数：{%=o[i].voteNumber%}</p>
+  </div>
+</div>
+{% } %}
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script type="text/javascript" src="js/zh-cn.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" charset="UTF-8">
+var pageIndex = 1;
+mui('.works').on('tap', '.btn-more', function(event) {
+	event.preventDefault();
+	pageIndex++;		
+	work(pageIndex);
+});
+$(function(){
+	work(pageIndex);
+});
+var work = function(pageIndex){
+	$.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/myWork',{'token':sessionStorage.getItem('token'),'mobile':getUrlParam('mobile')},function(data) {
+	  if (data.status=='200') {
+	  	if (data.data.length>0) {
+	  		$('.btn-more').remove();
+				var work = tmpl('tmpl-work',data.data);
+		    $('.works').append(work);
+	      $('.work-cover').height($('.work-cover').width());
+		    if (data.data.length==10&&$('.btn-more').length===0) {
+		    	$('.works').append('<button class="btn-more">查看更多</button>');
+		    }
+		    if (data.data.length<10) {
+		  		$('.rank').append("<p class='p-null'>没有更多数据~<p>");
+		    }
+				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+	  	} else {
+	  		if ($('.artist-work').length===0) {
+		  		$('.works').html("<p class='p-null'>没有更多数据~<p>");
+	  		}
+	  	}		
+	  }
+	});
+};
+</script>

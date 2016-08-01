@@ -604,7 +604,7 @@ var getState = function(pageIndex){
 				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
 			} else  {
 				if ($('.artist-state').length==0) {
-		  		$('#state').append("<p class='p-null'>没有更多数据<p>");
+		  		$('#state').html("<p class='p-null'>没有更多数据<p>");
 	  		}
 	  	}
 	  }
@@ -625,8 +625,8 @@ var getExhibit = function(pageIndex){
 		    $('.exhibit-cover').height($('.exhibit-cover').width())
 				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
 	  	} else {
-	  		if ($('.artist-state').length==0) {
-		  		$('#artist-exhibit').append("<p class='p-null'>没有更多数据<p>");
+	  		if ($('.artist-exhibit').length==0) {
+		  		$('#exhibit').html("<p class='p-null'>没有更多数据<p>");
 	  		}
 	  	}		
 			// $('#slider').height($('.mui-control-content.mui-active').height()+50);
