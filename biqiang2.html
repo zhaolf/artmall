@@ -18,19 +18,21 @@
     overflow: hidden;
   }
   
-  .btn-submit {
-    display: none;
-    padding-top: 16px!important;
-  }
-  
   .btn-upload,
-  .btn-choice {
+  .btn-choice,
+  .btn-submit {
     position: relative;
     width: 119px;
     height: 39px;
     border: 1px solid #333;
     color: #333;
     line-height: 26px;
+  }
+
+  .btn-submit {
+    display: none;
+    margin: 20px auto;
+    width: 100%;
   }
   
   .btn-choice a {
@@ -59,7 +61,8 @@
   }
   
   .btn-bar {
-    margin-top: 30px;
+    /*margin-top: 30px;*/
+    margin-bottom: 20px;
   }
   
   #scroll {
@@ -140,11 +143,11 @@
 </head>
 
 <body>
-  <header class="mui-bar mui-bar-nav">
+  <!-- <header class="mui-bar mui-bar-nav">
     <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
     <h1 class="mui-title">PK吧，版画!</h1>
     <a class="mui-icon mui-pull-right btn-submit">保存并预览</a>
-  </header>
+  </header> -->
   <div class="mui-content">
     <div class="bg">
       <p>暂无预览</p>
@@ -155,12 +158,6 @@
       </div> -->
     </div>
     <div style="padding:20px 36px;">
-      <div class="bar-input">
-        <input type="text" name="author" placeholder="作者">
-        <input type="text" name="workname" placeholder="作品名称">
-        <input type="tel" name="phone" placeholder="联系电话">
-        <button class="mui-btn-block btn-submit">保存并预览</button>
-      </div>
       <div class="btn-bar">
         <button class="btn-upload">
           上传室内照片
@@ -168,6 +165,12 @@
         </button>
         <a href="javascript:void(0)" class="mui-btn btn-choice mui-pull-right">选择版画</a>
       </div>
+      <div class="bar-input">
+        <input type="text" name="author" placeholder="作者">
+        <input type="text" name="workname" placeholder="作品名称">
+        <input type="tel" name="phone" placeholder="联系电话">
+      </div>
+      <button class="btn-submit">保存并预览</button>
     </div>
     <div id="banhua" class="mui-popover mui-popover-action mui-popover-bottom">
       <div class="mui-content">
@@ -334,36 +337,44 @@ mui(document).on('tap', '.btn-submit', function(event) {
 		pTip('请输入合法手机号码');
 		return;
 	}
+  $('input').blur();
+  $('html,body').scrollTop(0).css('overflow', 'hidden');
   $('.ajax-loading').fadeIn();
 	$('.icon').hide();
-  html2canvas($('.bg')).then(function(canvas) {
-    // document.body.appendChild(canvas);
-		$('.icon').show();
-    $.ajax({
-      url: biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/addWork',
-      type: 'POST',
-      data: {
-        'token': sessionStorage.getItem('token'),
-        'baseString': canvas.toDataURL("image/png").split('base64,')[1],
-        'author': author,
-        'worksName': workName,
-        'mobile': phone,
-      },
-      beforeSend: function(xhr){
-        $('.btn-submit').attr('disabled', 'disabled');
-      }
-    })
-    .done(function(data) {
-      if (data.status == "200") {
-        console.log(data);
-        location.href="biqiang3.html?workId="+data.data;
-      }
-    })
-    .always(function() {
-      $('.btn-submit').removeAttr('disabled');
-      $('.ajax-loading').fadeOut();
-    });
+  html2canvas($('.bg'), {
+    onrendered: function(canvas) {
+      // document.body.appendChild(canvas);
+      // $('.ajax-loading').fadeOut();
+      $('.icon').show();
+      $.ajax({
+        url: biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/addWork',
+        type: 'POST',
+        data: {
+          'token': sessionStorage.getItem('token'),
+          'baseString': canvas.toDataURL("image/png").split('base64,')[1],
+          'author': author,
+          'worksName': workName,
+          'mobile': phone,
+        },
+        beforeSend: function(xhr){
+          $('.btn-submit').attr('disabled', 'disabled');
+        }
+      })
+      .done(function(data) {
+        if (data.status == "200") {
+          location.href="biqiang3.html?workId="+data.data;
+        }
+      })
+      .always(function() {
+        $('.btn-submit').removeAttr('disabled');
+        $('.ajax-loading').fadeOut();
+      });
+    }
   });
+  // html2canvas($('.bg')).then(function(canvas) {
+    
+		// // 
+  // });
 });
 $(function() {
   $('.bg').height($(window).width()).css('line-height', $(window).width() + 'px');
@@ -433,7 +444,6 @@ upfile.onchange = function(event) {
       'background': 'url(' + picUrl + ') no-repeat center center',
       'background-size': 'cover'
     });
-    // bgStart(picUrl);
   };
 };
 
@@ -542,7 +552,6 @@ var initMove =function(el){
 
 	function onPanstart(ev) {
 	  str = el.style.webkitTransform; //translate(50px,0px)
-    console.log(str);
     transform.scale = str.split('scale(')[1].split(',')[0];
     transform.angle = str.split(', ').pop().split('deg')[0];
 	  startx = parseInt(str.match(/\-?[0-9]+/g)[1]);
