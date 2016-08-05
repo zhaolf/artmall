@@ -30,6 +30,31 @@
 	  .btn-bar a:first-child {
 	  	margin-right: 50px;
 	  }
+	  .pk{
+	  	width:300px;
+	  	height: 278px;
+	  	margin:63px auto;
+	  	background: url('img/pk.png') no-repeat;
+	  	background-size: cover;
+	  	position: relative;
+	  }
+	  .btn-join{
+	  	width: 100px;
+	  	height: 40px;
+	  	background: url('img/btn-join.gif') no-repeat;
+	  	background-size: cover;
+	  	position: absolute;
+	  	top: 180px;
+	  	left: 115px;
+	  	display: none;
+	  }
+	  .intro{
+	  	position: absolute;
+	    text-align: center;
+	    left: 115px;
+	    top: 180px;
+	    display: none;
+	  }
 		</style>
 	</head>
 	<body>
@@ -49,8 +74,12 @@
 			<h1 class="mui-title">PK吧，版画！</h1>
 			<a class="mui-icon mui-pull-right btn-share"></a>
 		</header> -->
+		<audio src="mp3/bgm.mp3" autoplay loop></audio>
 		<div class="mui-content">
-			<a href="biqiang2.html"><img src="img/pk.png" style="width:300px;margin:63px auto;display:block"></a>
+			<div class="pk">
+				<button class="btn-join" onclick="javascript:location.href='biqiang2.html'"></button>
+				<p class="intro">右上角“分享”至微信<br>微信打开即可参与</p>
+			</div>
 			<div class="btn-bar">
 				<a class="mui-btn" href="rule.html">活动规则</a>
 				<a class="mui-btn" href="rank.html">查看排名</a>
@@ -78,6 +107,11 @@ mui('.mui-bar-nav').on('tap', '.btn-share', function(event) {
 });
 $(function(){
 	sessionStorage.setItem('token',getUrlParam('token'));
+	if (navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1){
+		$('.btn-join').show();
+  }else{
+  	$('.intro').show();
+  }
 });
 </script>
 <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
@@ -122,3 +156,13 @@ window.onload = function(){
   });
 };
 </script>
+<script	src="http://s11.cnzz.com/z_stat.php?id=1259533468&web_id=1259533468" language="JavaScript"></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f0037159fea83e84521ecd28d0a1822e";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>	

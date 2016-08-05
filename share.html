@@ -127,6 +127,7 @@ mui('.mui-content').on('tap', '.btn-vote', function(event) {
 	location.href="rank.html";
 });
 $(function(){
+	sessionStorage.setItem('token',getUrlParam('token'));
 	// $.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/getWeChatUserInfo', {'code': getUrlParam('code')}, function(data, textStatus) {
 	//   if (data.status=='200') {
 	  	$.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/workDetail', {'workId': getUrlParam('workId'),'token':getUrlParam('token')}, function(data, textStatus) {
