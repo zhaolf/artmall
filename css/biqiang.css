@@ -107,3 +107,18 @@ a{color: #949494}
     -webkit-transform: scaleY(1.0);
   }
 }
+.btn-play{
+	position: fixed;
+	right: 15px;
+	bottom: 15px;
+	z-index: 7;
+	width: 30px;
+	height: 30px;
+	border: none;
+	background: url('../img/audio_1.png') no-repeat;
+	background-size: cover;
+}
+.btn-play.play{
+	background: url('../img/audio.png') no-repeat;
+	background-size: cover;
+}

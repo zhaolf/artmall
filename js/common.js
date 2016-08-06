@@ -37,7 +37,18 @@ $.ajaxSetup({
 	  }
 }); 
 
+// var biqiangBaseUrl = '';
 var biqiangBaseUrl = 'http://testapi.artgoer.cn/artgoer';
 // $(function(){
 // 	$('header.mui-bar-nav').remove();
 // });
+
+function playAudio(){ 
+	if ($('.btn-play').hasClass('play')) {
+	  $('#myAudio')[0].pause(); 
+	  $('.btn-play').removeClass('play');
+	}else{
+	  $('#myAudio')[0].play(); 
+	  $('.btn-play').addClass('play');
+	}
+} 

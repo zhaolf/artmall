@@ -148,7 +148,8 @@
     <h1 class="mui-title">PK吧，版画!</h1>
     <a class="mui-icon mui-pull-right btn-submit">保存并预览</a>
   </header> -->
-  <audio src="mp3/bgm.mp3" autoplay loop></audio>
+  <button class="btn-play play" onclick="playAudio()"></button>
+  <audio src="mp3/bgm.mp3" autoplay loop id="myAudio"></audio>
   <div class="mui-content">
     <div class="bg">
       <p>暂无预览</p>
@@ -162,7 +163,7 @@
       <div class="btn-bar">
         <button class="btn-upload">
           上传室内照片
-          <input type="file" name="" id="upfile">
+          <!-- <input type="file" name="" id="upfile"> -->
         </button>
         <a href="javascript:void(0)" class="mui-btn btn-choice mui-pull-right">选择版画</a>
       </div>
@@ -254,6 +255,7 @@
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/tmpl.min.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
+<!-- <script src="js/html2canvas.js"></script> -->
 <script src="//cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 <script src="//cdn.bootcss.com/hammer.js/2.0.8/hammer.min.js"></script>
 <script type="text/javascript" src="js/exif.min.js"></script>
@@ -273,7 +275,7 @@ mui("#scroll").on('tap', '.banhua', function(event) {
 
   var img = new Image();
   img.setAttribute('crossOrigin','anonymous');
-  img.src = $(this).data('src') + "?imageMogr2/thumbnail/336";
+  img.src = $(this).data('src') + "?imageMogr2/thumbnail/672";
   img.onload = function(){
   	var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d"),picSrc=''; 
@@ -283,8 +285,8 @@ mui("#scroll").on('tap', '.banhua', function(event) {
     ctx.drawImage(img, 0, 0, img.width, img.height); 
     picSrc = canvas.toDataURL("image/png"); 
 		$('#target_'+index).css({
-	  	'width': img.width/3,
-	  	'height': img.height/3,
+	  	'width': img.width/6,
+	  	'height': img.height/6,
 	  	'background': 'url('+picSrc+') no-repeat center',
 	  	'background-size': 'cover'
 	  });
@@ -344,15 +346,19 @@ mui(document).on('tap', '.btn-submit', function(event) {
   $('.ajax-loading').fadeIn();
 	$('.icon').hide();
   html2canvas($('.bg'), {
+    allowTaint:true,
+    // logging:true,
+    useCORS:true,
     onrendered: function(canvas) {
       // document.body.appendChild(canvas);
       // $('.ajax-loading').fadeOut();
-      $('.icon').show();
+      // $('.icon').show();
+
       $.ajax({
         url: biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/addWork',
         type: 'POST',
         data: {
-          'token': sessionStorage.getItem('token'),
+          'token': 'df68e038-143e-41cb-b554-456f78f184fc',
           'baseString': canvas.toDataURL("image/png").split('base64,')[1],
           'author': author,
           'worksName': workName,
@@ -371,12 +377,10 @@ mui(document).on('tap', '.btn-submit', function(event) {
         $('.btn-submit').removeAttr('disabled');
         $('.ajax-loading').fadeOut();
       });
-    }
+    },
+    width: $('.bg').width()*2 , 
+    height: $('.bg').height()*2
   });
-  // html2canvas($('.bg')).then(function(canvas) {
-    
-		// // 
-  // });
 });
 $(function() {
   $('.bg').height($(window).width()).css('line-height', $(window).width() + 'px');
@@ -394,7 +398,7 @@ $(function() {
 var getBanhua = function(id,name,pageIndex){
   $.ajax({
     url: biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/pictureList',
-    data: {'picCategories':name,'token':sessionStorage.getItem('token'),pageIndex:pageIndex},
+    data: {'picCategories':name,'token':'df68e038-143e-41cb-b554-456f78f184fc',pageIndex:pageIndex},
     beforeSend: function(xhr){
       $('.btn-more').attr('disabled', 'disabled');
     }
@@ -424,138 +428,140 @@ var getBanhua = function(id,name,pageIndex){
   });
 };
 
-var upfile = document.getElementById("upfile");
-upfile.onchange = function(event) {
-  var img = event.target.files[0];
+// var upfile = document.getElementById("upfile");
+// upfile.onchange = function(event) {
+//   var img = event.target.files[0];
 
-  // if (img.size>(5*1024*1024)) {
-  //   pTip('上传图片的尺寸上限为5M');
-  //   return ;
-  // };
-  var Orientation = null;
-  var reader = new FileReader();
+//   // if (img.size>(5*1024*1024)) {
+//   //   pTip('上传图片的尺寸上限为5M');
+//   //   return ;
+//   // };
+//   var Orientation = null;
+//   var reader = new FileReader();
 
-  EXIF.getData(img, function() {  
-   // console.log(EXIF.pretty(this));  
-    EXIF.getAllTags(this);   
-    //console.log(EXIF.getTag(this, 'Orientation'));   
-    Orientation = EXIF.getTag(this, 'Orientation');  
-    console.log(Orientation);
-    //return;  
-  }); 
-  $('.ajax-loading').show();
+//   EXIF.getData(img, function() {  
+//    // console.log(EXIF.pretty(this));  
+//     EXIF.getAllTags(this);   
+//     //console.log(EXIF.getTag(this, 'Orientation'));   
+//     Orientation = EXIF.getTag(this, 'Orientation');  
+//     console.log(Orientation);
+//     //return;  
+//   }); 
+//   $('.ajax-loading').show();
 
-  reader.readAsDataURL(img);
-  reader.onload = function(e) {
-    var image = new Image();  
-    image.src = e.target.result;
-    image.onload = function() {  
-      var expectWidth = this.naturalWidth;  
-      var expectHeight = this.naturalHeight;  
-      var canvas = document.createElement("canvas");  
-      var ctx = canvas.getContext("2d");  
-      canvas.width = expectWidth;  
-      canvas.height = expectHeight;  
-      ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
+//   reader.readAsDataURL(img);
+//   reader.onload = function(e) {
+//     var image = new Image();  
+//     image.src = e.target.result;
+//     image.onload = function() {  
+//       var expectWidth = this.naturalWidth;  
+//       var expectHeight = this.naturalHeight;  
+//       var canvas = document.createElement("canvas");  
+//       var ctx = canvas.getContext("2d");  
+//       canvas.width = expectWidth;  
+//       canvas.height = expectHeight;  
+//       ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
 
 
-      if (navigator.userAgent.match(/iphone/i)) {  
-        console.log('iphone');  
-        //console.log(expectWidth + ',' + expectHeight);  
-        //如果方向角不为1，都需要进行旋转 added by lzk  
-        if(Orientation !== "" && Orientation != 1){  
-          console.log('旋转处理');  
-          switch(Orientation){  
-          case 6://需要顺时针（向左）90度旋转  
-            console.log('需要顺时针（向左）90度旋转');  
-            rotateImg(this,'left',canvas);  
-            break;  
-          case 8://需要逆时针（向右）90度旋转  
-            console.log('需要顺时针（向右）90度旋转');  
-            rotateImg(this,'right',canvas);  
-            break;  
-          case 3://需要180度旋转  
-            console.log('需要180度旋转');  
-            rotateImg(this,'right',canvas);//转两次  
-            rotateImg(this,'right',canvas);  
-            break;  
-          }         
-        }  
-        picUrl = canvas.toDataURL("image/png", 0.8);  
-      }else{
-        picUrl = e.target.result;
-      }
-      $('.ajax-loading').fadeOut();
+//       if (navigator.userAgent.match(/iphone/i)) {  
+//         console.log('iphone');  
+//         //console.log(expectWidth + ',' + expectHeight);  
+//         //如果方向角不为1，都需要进行旋转 added by lzk  
+//         if(Orientation !== "" && Orientation != 1){  
+//           console.log('旋转处理');  
+//           switch(Orientation){  
+//           case 6://需要顺时针（向左）90度旋转  
+//             console.log('需要顺时针（向左）90度旋转');  
+//             rotateImg(this,'left',canvas);  
+//             break;  
+//           case 8://需要逆时针（向右）90度旋转  
+//             console.log('需要顺时针（向右）90度旋转');  
+//             rotateImg(this,'right',canvas);  
+//             break;  
+//           case 3://需要180度旋转  
+//             console.log('需要180度旋转');  
+//             rotateImg(this,'right',canvas);//转两次  
+//             rotateImg(this,'right',canvas);  
+//             break;  
+//           } 
+//           picUrl = canvas.toDataURL("image/png", 0.5); 
+//         }else{
+//           picUrl = e.target.result;  
+//         }  
+//       }else{
+//         picUrl = e.target.result;
+//       }
+//       $('.ajax-loading').fadeOut();
 
-      $('.btn-submit').show();
-      $('.bg p').remove();
-      $('.bg').css({
-        'background': 'url(' + picUrl + ') no-repeat center center',
-        'background-size': 'cover'
-      });
-    };
-  };
-};
-function rotateImg(img, direction,canvas) {    
-  //console.log(img);  
-  //最小与最大旋转方向，图片旋转4次后回到原方向    
-  var min_step = 0;    
-  var max_step = 3;    
-  //var img = document.getElementById(pid);    
-  if (img === null)return;    
-  //img的高度和宽度不能在img元素隐藏后获取，否则会出错    
-  var height = img.height;    
-  var width = img.width;    
-  //var step = img.getAttribute('step');    
-  var step = 2;    
-  if (step === null) {    
-      step = min_step;    
-  }    
-  if (direction == 'right') {    
-      step++;    
-      //旋转到原位置，即超过最大值    
-      step > max_step && (step = min_step);    
-  } else {    
-      step--;    
-      step < min_step && (step = max_step);    
-  }    
-  //img.setAttribute('step', step);    
-  /*var canvas = document.getElementById('pic_' + pid);   
-  if (canvas == null) {   
-      img.style.display = 'none';   
-      canvas = document.createElement('canvas');   
-      canvas.setAttribute('id', 'pic_' + pid);   
-      img.parentNode.appendChild(canvas);   
-  }  */  
-  //旋转角度以弧度值为参数    
-  var degree = step * 90 * Math.PI / 180;    
-  var ctx = canvas.getContext('2d');    
-  switch (step) {    
-      case 0:    
-          canvas.width = width;    
-          canvas.height = height;    
-          ctx.drawImage(img, 0, 0);    
-          break;    
-      case 1:    
-          canvas.width = height;    
-          canvas.height = width;    
-          ctx.rotate(degree);    
-          ctx.drawImage(img, 0, -height);    
-          break;    
-      case 2: 
-          canvas.width = width;    
-          canvas.height = height;    
-          ctx.rotate(degree);    
-          ctx.drawImage(img, -width, -height);    
-          break;    
-      case 3:    
-          canvas.width = height;    
-          canvas.height = width;    
-          ctx.rotate(degree);    
-          ctx.drawImage(img, -width, 0);    
-          break;    
-    }    
-}   
+//       $('.btn-submit').show();
+//       $('.bg p').remove();
+//       $('.bg').css({
+//         'background': 'url(' + picUrl + ') no-repeat center center',
+//         'background-size': 'cover'
+//       });
+//     };
+//   };
+// };
+// function rotateImg(img, direction,canvas) {    
+//   //console.log(img);  
+//   //最小与最大旋转方向，图片旋转4次后回到原方向    
+//   var min_step = 0;    
+//   var max_step = 3;    
+//   //var img = document.getElementById(pid);    
+//   if (img === null)return;    
+//   //img的高度和宽度不能在img元素隐藏后获取，否则会出错    
+//   var height = img.height;    
+//   var width = img.width;    
+//   //var step = img.getAttribute('step');    
+//   var step = 2;    
+//   if (step === null) {    
+//       step = min_step;    
+//   }    
+//   if (direction == 'right') {    
+//       step++;    
+//       //旋转到原位置，即超过最大值    
+//       step > max_step && (step = min_step);    
+//   } else {    
+//       step--;    
+//       step < min_step && (step = max_step);    
+//   }    
+//   //img.setAttribute('step', step);    
+//   var canvas = document.getElementById('pic_' + pid);   
+//   if (canvas == null) {   
+//       img.style.display = 'none';   
+//       canvas = document.createElement('canvas');   
+//       canvas.setAttribute('id', 'pic_' + pid);   
+//       img.parentNode.appendChild(canvas);   
+//   }    
+//   //旋转角度以弧度值为参数    
+//   var degree = step * 90 * Math.PI / 180;    
+//   var ctx = canvas.getContext('2d');    
+//   switch (step) {    
+//       case 0:    
+//           canvas.width = width;    
+//           canvas.height = height;    
+//           ctx.drawImage(img, 0, 0);    
+//           break;    
+//       case 1:    
+//           canvas.width = height;    
+//           canvas.height = width;    
+//           ctx.rotate(degree);    
+//           ctx.drawImage(img, 0, -height);    
+//           break;    
+//       case 2: 
+//           canvas.width = width;    
+//           canvas.height = height;    
+//           ctx.rotate(degree);    
+//           ctx.drawImage(img, -width, -height);    
+//           break;    
+//       case 3:    
+//           canvas.width = height;    
+//           canvas.height = width;    
+//           ctx.rotate(degree);    
+//           ctx.drawImage(img, -width, 0);    
+//           break;    
+//     }    
+// }   
 
 var transform;
 
@@ -680,5 +686,85 @@ var initMove =function(el){
 
 	  requestElementUpdate();
 	}
+};
+</script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+window.onload = function(){
+  $.get(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/jsConfig',{'url':location.href.split('#')[0],'token':'df68e038-143e-41cb-b554-456f78f184fc'}, function(data) {
+  // $.get('http://fws.wemay.ichoice.me:8088/weixin/JSSDK',{'url':location.href.split('#')[0]}, function(data) {
+    if (data.status=='200') {
+      // data = $.parseJSON(data.message);
+      // console.log(data);
+      wx.config({
+        // debug: true,
+        appId: data.data.appId,
+        timestamp: data.data.timestamp,
+        nonceStr: data.data.nonceStr,
+        signature: data.data.signature,
+        jsApiList: [
+          // 'onMenuShareTimeline',
+          // 'onMenuShareAppMessage',
+          'chooseImage',
+          'previewImage',
+          'uploadImage',
+          'downloadImage'
+          // 'onMenuShareQQ',
+          // 'onMenuShareWeibo',
+          ]
+      });
+      wx.ready(function () {
+        $('.btn-upload').click(function(event) {
+          wx.chooseImage({
+            count: 1, 
+            sizeType: ['original', 'compressed'], 
+            sourceType: ['album', 'camera'], 
+            success: function (res) {
+              var localIds = res.localIds;
+              wx.uploadImage({
+                localId: localIds[0], // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                  var serverId = res.serverId; // 返回图片的服务器端ID
+                  // prompt('serverId',serverId);
+                  $.getJSON(biqiangBaseUrl+'/api/v1/user/0/compareWall/activity/downloadPic',{'token':'df68e038-143e-41cb-b554-456f78f184fc','mediaId':serverId},function(data) {
+                    if (data.status=='200') {
+                      // alert(data.data);
+                      var image = new Image();  
+                      image.setAttribute('crossOrigin','anonymous');
+                      image.src = data.data;
+                      image.onload = function() {  
+                        var expectWidth = this.naturalWidth;  
+                        var expectHeight = this.naturalHeight;  
+                        var canvas = document.createElement("canvas");  
+                        var ctx = canvas.getContext("2d");  
+                        canvas.width = expectWidth;  
+                        canvas.height = expectHeight;  
+                        ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
+                        var picSrc = canvas.toDataURL("image/png"); 
+                        $('.bg').css({
+                          'background': 'url(' + picSrc + ') no-repeat center center',
+                          'background-size': 'cover'
+                        });
+                      };
+                    }
+                  });
+                }
+              });
+              $('.bg p').remove();
+              $('.bg').css({
+                'background': 'url(' + localIds[0] + ') no-repeat center center',
+                'background-size': 'cover'
+              });
+              $('.btn-submit').show();
+            }
+          });
+        });
+      });
+      wx.error(function (res) {
+        // alert(res.errMsg);
+      });
+    }
+  });
 };
 </script>

@@ -233,7 +233,7 @@ mui('.mui-content').on('tap', '.btn-vote', function(event) {
 			'token': 'df68e038-143e-41cb-b554-456f78f184fc'
 		},
 		beforeSend: function(){
-      $('.btn-vote').attr('disabled', 'disabled');
+      that.attr('disabled', 'disabled');
     }
 	})
 	.done(function(data) {
@@ -247,7 +247,7 @@ mui('.mui-content').on('tap', '.btn-vote', function(event) {
 	  }
 	})
 	.always(function() {
-		$('.btn-vote').removeAttr('disabled');
+		// $('.btn-vote').removeAttr('disabled');
 	});
 });
 $(function(){

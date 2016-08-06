@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="http://nos.netease.com/vod163/nep.min.css" rel="stylesheet">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<!-- <script src="js/mui.min.js"></script> -->
+		<script src="//nos.netease.com/vod163/nep.min.js"></script>
+		<style type="text/css">
+		.live{
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+			padding: 30px 15px;
+		}
+		.live-info{
+			width: 162px;
+			height: 36px;
+			line-height: 36px;
+			background-color: rgba(255,255,255,.4);
+			border-radius: 20px;
+			position: relative;
+		}
+		.author-head{
+			display: inline-block;
+			border-radius: 50%;
+			position: absolute;
+			top: 3px;
+			left: 3px;
+		}
+		.live-info p{
+			margin: 0;
+			text-indent: 43px;
+			color: #fff;
+			font-size: 14px;
+			/*width: 120px;*/
+			line-height: 38px;
+		}
+		.btn-follow{
+			border-radius: 50%;
+			font-size: 12px;
+			line-height: 1em;
+			color: #fff;
+			padding: 0;
+			position: absolute;
+			right: 3px;
+			top: 3px;
+			width: 31px;
+			height: 31px;
+			border: none;
+			background-color: rgba(0,0,0,.3);
+		}
+		.live-viewer{
+			height: 36px;
+			line-height: 36px;
+			position: relative;
+			text-align: right;
+		}
+		.viewer-head{
+			display: inline-block;
+			border-radius: 50%;
+			margin-top: 3px;
+		}
+		.live-view{
+			height: 26px;
+			display: inline-block;
+	    padding-right: 15px;
+			line-height: 26px;
+			border-radius: 13px;
+			position: relative;
+			background: url('img/video-watch@2x.png') no-repeat rgba(255,255,255,.4);
+			background-position: 10px;
+			margin-top: 8px;
+			background-size: 17px;
+		}
+		.live-view span{
+			font-size: 14px;
+			color: #fff;
+			text-indent: 34px;
+			display: inline-block;
+		}
+		.live-end{
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 9;
+			display: none;
+		}
+		.live-end .center{
+			position: absolute;
+			left: 50%;
+			top: 35%;
+			width: 120px;
+			height: 120px;
+			margin-left: -60px;
+			text-align: center;
+			/*line-height: 120px;*/
+		}
+		.live-end .center p{
+			color: #fff;
+			font-size: 20px;
+			margin-top: 20px;
+		}
+		.mask{
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0,0,0,.4);
+		}
+		</style>
+	</head>
+	<body>
+		<div class="mui-content">
+			<video id="nePlayer" class="video-js" width="860" height="486" controls data-setup="{}">
+      </video>
+			<div class="live">
+			</div>
+			<div class="live-end">
+				<div class="mask"></div>
+				<div class="center">
+					<img src="img/ic_null.png" width="38">
+					<p>暂无直播</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-live">
+<div class="mui-pull-left">
+	<div class="live-info">
+		<img src="http://7xavon.com1.z0.glb.clouddn.com/Fq47kJxGGjMQ1xAtf31wv1JRh32t?imageMogr2/thumbnail/62" width="31" height="31" class="author-head">
+			<p class="mui-ellipsis">{%=o.channelDesc%}</p>
+			<button class="btn-follow" data-id="{%=o.userId%}">关注</button>
+		</div>
+		<div class="live-view">
+			<span>{%=o.viewerNum%}人在看</span>
+		</div>
+</div>
+<div class="mui-pull-right">
+	<div class="live-viewer">
+		{% for (var i = 0; i< o.chatRoomUsers.length; i++) { %} 
+		<img src="{%=o.chatRoomUsers[i].headPic%}?imageMogr2/thumbnail/62" width="31" height="31" class="viewer-head">
+		{% } %}
+	</div>
+</div>
+</script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script>
+var initOptions = {
+    "controls": false, //是否显示控制条
+    "autoplay": true, //是否自动播放(ios不支持自动播放)
+    "preload": "auto",
+    "poster": "myPoster.jpg", //视频播放前显示的图片
+    "loop": false, //是否循环播放
+    "controlBar": { 
+        muteToggle: false
+    }
+};
+var myPlayer=null;
+$(function(){
+	$.post('http://testapi.artgoer.cn/artgoer/api/v1/user/0/netease/joinLiveVideoH5', {'token': 'df68e038-143e-41cb-b554-456f78f184fc','cid':getUrlParam('cid')}, function(data, textStatus) {
+		if (data.status=="200") {
+			console.log(data.data);
+			initOptions.poster = data.data.channelPic+'?imageMogr2/thumbnail/750x1136';
+			$('.live-end').css({
+				'background': 'url('+data.data.channelPic+'?imageMogr2/thumbnail/750x1136'+') no-repeat center ',
+				'background-size': 'cover'
+			});
+			var live = tmpl('tmpl-live', data.data);
+      $('.live').append(live);
+			myPlayer = neplayer("nePlayer",initOptions);
+			myPlayer.resize($(window).width(), $(window).height());
+			myPlayer.setDataSource({
+				type: 'rtmp/flv',
+				src: 'rtmp://v2e933925.live.126.net/live/2d3c91f85cf441e5b504def37c3b7df0'
+				// type: 'video/mp4',
+				// src: 'http://www.w3school.com.cn/i/movie.ogg'
+			});
+			myPlayer.play();
+			myPlayer.onPlayState(1,function(){
+		    
+			});
+			myPlayer.onPlayState(3,function(){
+		    // $('.live-end').fadeIn();
+			});
+			myPlayer.onError(function(err){
+		    // $('.live-end').show();
+			});
+		}
+	});
+
+	$('.live').on('click', '.btn-follow', function(event) {
+		event.preventDefault();
+		console.log($(this).data('id'));
+		// $.ajax({
+  //     url: 'path',
+  //     type: 'POST',
+  //     data: {
+  //       'token': 'df68e038-143e-41cb-b554-456f78f184fc',
+  //     },
+  //     beforeSend: function(xhr){
+  //       $('.btn-follow').attr('disabled', 'disabled');
+  //     }
+  //   })
+  //   .done(function(data) {
+  //     if (data.status == "200") {
+
+  //     }
+  //   })
+  //   .always(function() {
+  //     $('.btn-follow').removeAttr('disabled');
+  //   });
+	});
+});
+</script>
