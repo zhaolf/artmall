@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="//cdn.bootcss.com/video.js/5.11.2/video-js.min.css" rel="stylesheet">
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/common.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<style type="text/css">
+		html,body{
+			background: #fff;
+			overflow-x: hidden;
+		}
+		.room-cover{
+			height: 232px;
+			width: 100%;
+			background: #f4f4f4;
+			position: relative;
+		}
+		.room-mask{
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0,0,0,.6);
+		}
+		.room-mask p{
+			text-align: center;
+			margin-top: 90px;
+			font-size: 20px;
+			color: #fff;
+			line-height: 1em;
+		}
+		.room{
+			padding: 0 15px;
+		}
+		.room-author{
+			position: relative;
+			padding: 16px 0;
+		}
+		.room-author:after{
+			position: absolute;
+	    right: 0;
+	    bottom: 0;
+	    left: 0;
+	    height: 1px;
+	    content: '';
+	    -webkit-transform: scaleY(.5);
+	    transform: scaleY(.5);
+	    background-color: #ececec;
+		}
+		.author-head{
+			width: 42px;
+			height: 42px;
+			border-radius: 50%;
+			margin-top: 2px;
+			position: relative;
+	    top: 1px;
+	    display: inline-block;
+		}
+		.author-info{
+			display: inline-block;
+			position: relative;
+	    top: -4px;
+	    left: 8px;
+		}
+		.author-info h4{
+			font-size: 14px;
+			color: #a6abb9;
+			font-weight: normal;
+			line-height: 1em;
+		}
+		.author-info p{
+			font-size: 12px;
+			color: #c9caca;
+			line-height: 1em;
+			margin: 0;
+		}
+		.btn-follow{
+			position: relative;
+			top: 13px;
+			width: 76px;
+			height: 27px;
+			color: #000;
+			font-size: 12px;
+			padding: 0;
+			border-color: #000;
+			border-radius: 3px
+		}
+		.h-record{
+			color: #000;
+			font-size: 14px;
+			font-weight: normal;
+			margin: 12px 0;
+		}
+		.room-record{
+			margin: 0 -6px;
+		}
+		.work{
+			margin: 0 6px;
+		}
+		.work-cover{
+			height: 100px;
+			position: relative;
+			border-radius: 3px;
+		}
+		.work-mask{
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0,0,0,.3);
+			border-radius: 3px;
+		}
+		.work-info{
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 25px;
+			background: url('img/video-watch@2x.png') 7px center no-repeat rgba(0,0,0,.6);
+			background-size: 16px;
+			border-bottom-right-radius: 3px;
+			border-bottom-left-radius: 3px;
+			text-indent: 30px;
+			font-size: 12px;
+			color: #fff;
+			line-height: 25px;
+		}
+		.work p{
+			margin-top: 6px;
+			color: #666;
+			font-size: 12px;
+		}
+		.work video{
+			opacity: 0;
+		}
+		.p-null{
+	  	font-size: 16px;
+	  	color: #c0c0c0;
+	    margin-top: 10px;
+	    text-align: center;
+	  }
+	  .video{
+	  	position: fixed;
+	  	left: 0;
+	  	top: 0;
+	  	right: 0;
+	  	bottom: 0;
+	  	background: rgba(0,0,0,.6);
+	  	display: none;
+	  }
+	  #myVideo{
+	  	position: absolute;
+	  	height: 200px;
+	  	background: #000;
+	  	top: 50%;
+	  	left: 50%;
+	  	transform:translate3d(-50%,-50%,0);
+			-ms-transform:translate3d(-50%,-50%,0); 	/* IE 9 */
+			-moz-transform:translate3d(-50%,-50%,0); 	/* Firefox */
+			-webkit-transform:translate3d(-50%,-50%,0); /* Safari 和 Chrome */
+			-o-transform:translate3d(-50%,-50%,0); 	/* Opera */
+	  }
+	  .btn-more{
+	  	width: 300px;
+	    background: #F8F8F8;
+	    color: #B8B8B8;
+	    margin: 10px auto;
+	    height: 42px;
+	    line-height: 42px;
+	    text-align: center;
+	    cursor: pointer;
+	    border: none;
+	    display: block;
+	    padding: 0;
+	  }
+	  .loading-mask{
+	  	position: fixed;
+	  	left: 0;
+	  	top: 0;
+	  	right: 0;
+	  	bottom: 0;
+	  	background: rgba(255,255,255,.8);
+	  	display: none;
+	  }
+	  .loading-mask .mui-loading{
+	    position: absolute;
+	    top: 50%;
+	    left: 50%;
+	    transform:translate3d(-50%,-50%,0);
+			-ms-transform:translate3d(-50%,-50%,0); 	/* IE 9 */
+			-moz-transform:translate3d(-50%,-50%,0); 	/* Firefox */
+			-webkit-transform:translate3d(-50%,-50%,0); /* Safari 和 Chrome */
+			-o-transform:translate3d(-50%,-50%,0); 	/* Opera */
+	  }
+		</style>
+	</head>
+	<body>
+		<div class="room-cover">
+      <div class="room-mask">
+      	<p>当前无直播</p>
+      </div>
+		</div>
+		<div class="room">
+			<div class="room-author"></div>
+			<h3 class="h-record">往期回顾</h3>
+			<div class="room-record mui-row"></div>
+		</div>
+		<!-- <div class="video"></div> -->
+		<div class="loading-mask">
+			<div class="mui-loading">
+				<div class="mui-spinner">
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/x-tmpl" id="tmpl-author">
+<div class="author-head lazy" data-original="{%=o.headPic+'?imageMogr2/thumbnail/84x84'%}" style="background-size:cover;background-position: center;background-repeat: no-repeat;"></div>
+<div class="author-info">
+	<h4>{%=o.userName%}</h4>
+	<p>{%=o.userName%}</p>
+</div>
+<button class="mui-pull-right btn-follow">关注</button>
+</script>
+<script type="text/x-tmpl" id="tmpl-record"> 
+{% for (var i = 0; i< o.length; i++) { %}
+<div class="mui-col-xs-6">
+  <div class="work" data-src="{%=o[i].origUrl%}" data-id="{%=o[i].id%}">
+    <div class="work-cover lazy" data-original="{%=o[i].snapshotUrl+'?imageMogr2/thumbnail/336x202'%}" style="background-size:cover;background-position: center;background-repeat: no-repeat;">
+      <div class="work-mask"></div>
+      <div class="work-info">{%=o[i].viewerNum%}看过</div>
+			<video id="myVideo_{%=o[i].id%}"  style="opacity:0;height:100px;width:0" class="video-js vjs-default-skin"  preload="auto" data-setup='{width:1,height:100}'>
+				<source src="{%=o[i].origUrl%}" type="video/mp4">
+			</video>
+    </div>
+    <p class="mui-ellipsis">{%=o[i].videoName%}</p>
+  </div>
+</div>
+{% } %}	
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.lazyload.min.js"></script>
+<script src="//cdn.bootcss.com/video.js/5.11.2/video.min.js"></script>
+<script src="//cdn.bootcss.com/video.js/5.11.2/lang/zh-CN.js"></script>
+<script type="text/javascript" src="js/tmpl.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript">
+var pageIndex = 1,myPlayer = null,anchorId = getUrlParam('anchorId'),bannerPicUrl = getUrlParam('bannerPicUrl');
+mui('.room-record').on('tap', '.work', function(event) {
+	event.preventDefault();
+	$('.loading-mask').show();
+  var src = $(this).data('src'),id = $(this).data('id');
+  myPlayer = videojs("myVideo_"+id,{width:1,height:100,autoplay:true,controls:false},function(){
+  	myPlayer.play();
+  	myPlayer.requestFullscreen();
+  	setTimeout(function(){
+			$('.loading-mask').hide();
+		},1000);
+	});
+	$.get('http://114.215.192.22:8091/artgoer/api/v1/user/0/netease/lookRecord?recordId='+id+'&token=df68e038-143e-41cb-b554-456f78f184fc', function(data) {
+	});
+}).on('tap', '.btn-more', function(event) {
+	event.preventDefault();
+	pageIndex++;		
+	record(anchorId,pageIndex);
+});
+$(function(){
+	$('.room-cover').css({
+		'background': 'url('+bannerPicUrl+'?imageMogr2/thumbnail/750x464) center no-repeat',
+		'background-size': 'cover'
+	});
+	record(anchorId,pageIndex);
+	// $('.video').click(function(event) {
+	// 	event.stopPropagation();
+	// 	myPlayer.dispose();
+	// 	$('#myVideo').remove();
+	// });
+});
+var record = function(anchorId,pageIndex){
+	$.ajax({
+		url: 'http://114.215.192.22:8091/artgoer/api/v1/user/0/netease/selectRecordByUser',
+		data: {anchorId: anchorId,token:'df68e038-143e-41cb-b554-456f78f184fc',pageIndex:pageIndex},
+		beforeSend:function(){
+			$('.btn-more').attr('disabled', 'disabled');
+		}
+	})
+	.done(function(data) {
+		if (data.status=='200') {
+			$('.btn-more').remove();
+			if (pageIndex==1) {
+				var author = tmpl('tmpl-author',data.data.user);
+		    $('.room-author').append(author);
+				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');    
+			}
+			if (data.data.recordList.length>0) {
+				var record = tmpl('tmpl-record',data.data.recordList);
+		    $('.room-record').append(record);
+		    // $('.work-cover').height($('.work-cover').width());
+		    if (data.data.recordList.length==10) {
+		    	$('.room-record').append('<button class="btn-more">查看更多</button>');
+		    }
+		    if (data.data.recordList.length<10) {
+		  		$('.room-record').append("<p class='p-null'>没有更多数据~<p>");
+		    }
+				$('.lazy').lazyload({placeholder:"img/f4f4f4.png",effect:"fadeIn"}).removeClass('lazy');
+			} else {
+				if ($('.work').length===0) {
+		  		$('.room-record').html("<p class='p-null'>没有更多数据~<p>");
+				}else{
+		  		$('.room-record').append("<p class='p-null'>没有更多数据~<p>");
+				}
+			}
+		}
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		$('.btn-more').removeAttr('disabled');
+	});
+	
+};
+</script>
